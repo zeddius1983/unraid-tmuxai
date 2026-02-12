@@ -37,6 +37,11 @@ tmuxai allows you to use AI capabilities directly from your tmux sessions.
 # TmuxAI Example Configuration
 # This is a sample configuration file for tmuxai
 # You can customize it according to your needs
+#
+# SECURITY WARNING: This file may contain sensitive API keys!
+# - Do NOT commit this file to version control with real API keys
+# - Keep your API keys secure and private
+# - Consider using environment variables for production use
 
 models:
   glm-4.7:
@@ -98,12 +103,18 @@ TEMP_FILE="${INSTALL_DIR}/tmuxai.tmp"
 DOWNLOAD_SUCCESS=false
 
 if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>/dev/null; then
-  # Check if downloaded file is not empty and is executable format
+  # Check if downloaded file is not empty and is a valid executable
   if [ -s "${TEMP_FILE}" ]; then
-    mv "${TEMP_FILE}" "${INSTALL_DIR}/tmuxai"
-    chmod +x "${INSTALL_DIR}/tmuxai"
-    DOWNLOAD_SUCCESS=true
-    echo "Binary download successful"
+    # Verify it's an executable binary (check for ELF magic number on Linux)
+    if file "${TEMP_FILE}" 2>/dev/null | grep -q -E "executable|ELF"; then
+      mv "${TEMP_FILE}" "${INSTALL_DIR}/tmuxai"
+      chmod +x "${INSTALL_DIR}/tmuxai"
+      DOWNLOAD_SUCCESS=true
+      echo "Binary download successful"
+    else
+      rm -f "${TEMP_FILE}"
+      echo "Downloaded file is not a valid executable binary"
+    fi
   else
     rm -f "${TEMP_FILE}"
     echo "Downloaded file was empty"
