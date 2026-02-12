@@ -25,7 +25,11 @@ ssh root@YOUR_UNRAID_IP
 # Download and install
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
+
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg
 
 # Configure with setup wizard
 bash /boot/config/plugins/tmuxai/setup.sh
@@ -54,7 +58,11 @@ tmuxai ask "What is Unraid?"
 
 2. Install the plugin:
    ```bash
+   # For Unraid 6.x:
    installplg /boot/config/plugins/tmuxai.plg
+   
+   # For Unraid 7:
+   plugin install /boot/config/plugins/tmuxai.plg
    ```
 
 ## Configuration

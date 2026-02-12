@@ -49,7 +49,11 @@ TmuxAI integrates AI capabilities directly into tmux terminal sessions on Unraid
 ### 2. Manual Installation
 ```bash
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
+
+# For Unraid 6.x:
 installplg tmuxai.plg
+# For Unraid 7:
+plugin install tmuxai.plg
 ```
 
 ## File Checklist
