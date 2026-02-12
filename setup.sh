@@ -25,8 +25,9 @@ echo "Which AI provider would you like to use?"
 echo "1) OpenAI (ChatGPT)"
 echo "2) Anthropic (Claude)"
 echo "3) Google (Gemini)"
-echo "4) Other (OpenAI-compatible)"
-read -p "Enter your choice (1-4): " provider_choice
+echo "4) OpenRouter"
+echo "5) Other (OpenAI-compatible)"
+read -p "Enter your choice (1-5): " provider_choice
 
 case $provider_choice in
     1)
@@ -45,6 +46,11 @@ case $provider_choice in
         MODEL_DEFAULT="gemini-pro"
         ;;
     4)
+        PROVIDER="openrouter"
+        ENV_VAR="OPENROUTER_API_KEY"
+        MODEL_DEFAULT="openai/gpt-3.5-turbo"
+        ;;
+    5)
         PROVIDER="custom"
         read -p "Enter your API base URL: " API_BASE
         ENV_VAR="OPENAI_API_KEY"
@@ -98,6 +104,10 @@ if [[ $persist =~ ^[Yy]$ ]]; then
             echo "export OPENAI_API_BASE=\"${API_BASE}\"" >> "$GO_FILE"
         fi
         
+        if [ "$PROVIDER" = "openrouter" ]; then
+            echo "export OPENROUTER_API_BASE=\"https://openrouter.ai/api/v1\"" >> "$GO_FILE"
+        fi
+        
         echo "✓ Configuration added to $GO_FILE"
     fi
     
@@ -111,6 +121,9 @@ else
     export ${ENV_VAR}="${API_KEY}"
     if [ "$PROVIDER" = "custom" ]; then
         export OPENAI_API_BASE="${API_BASE}"
+    fi
+    if [ "$PROVIDER" = "openrouter" ]; then
+        export OPENROUTER_API_BASE="https://openrouter.ai/api/v1"
     fi
     echo "✓ Configuration set for current session only"
 fi
@@ -128,6 +141,10 @@ EOF
 
 if [ "$PROVIDER" = "custom" ]; then
     echo "export OPENAI_API_BASE=\"${API_BASE}\"" >> "$CONFIG_DIR/.tmuxairc"
+fi
+
+if [ "$PROVIDER" = "openrouter" ]; then
+    echo "export OPENROUTER_API_BASE=\"https://openrouter.ai/api/v1\"" >> "$CONFIG_DIR/.tmuxairc"
 fi
 
 chmod 600 "$CONFIG_DIR/.tmuxairc"
