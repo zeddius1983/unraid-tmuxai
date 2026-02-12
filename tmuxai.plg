@@ -128,7 +128,7 @@ if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>"${ERROR_LOG}"; then
     if echo "${FILE_TYPE}" | grep -q "gzip compressed data"; then
       # Extract the archive
       echo "Extracting tmuxai archive..."
-      if tar -xzf "${TEMP_FILE}" -C "${TEMP_DIR}" 2>"${ERROR_LOG}"; then
+      if tar --no-same-owner -xzf "${TEMP_FILE}" -C "${TEMP_DIR}" 2>"${ERROR_LOG}"; then
         # Find the tmuxai binary in the extracted files
         TMUXAI_BINARY=$(find "${TEMP_DIR}" -name "tmuxai" -type f 2>/dev/null | head -n 1)
         if [ -n "${TMUXAI_BINARY}" ] && [ -f "${TMUXAI_BINARY}" ]; then
