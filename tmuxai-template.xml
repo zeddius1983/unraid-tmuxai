@@ -3,7 +3,7 @@
   <Name>tmuxai</Name>
   <Repository>tmuxai</Repository>
   <Registry>https://github.com/zeddius1983/unraid-tmuxai</Registry>
-  <Branch>master</Branch>
+  <Branch>main</Branch>
   <Support>https://github.com/zeddius1983/unraid-tmuxai/issues</Support>
   <Project>https://tmuxai.dev</Project>
   <Overview>
@@ -19,8 +19,8 @@
   </Overview>
   <Category>Tools:Utilities</Category>
   <WebUI></WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai-template.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai-template.xml</TemplateURL>
+  <Icon>https://tmuxai.dev/_ipx/q_80&amp;s_70x80/logo.svg</Icon>
   <Description>
     TmuxAI brings AI assistance to your tmux terminal sessions on Unraid.
     

@@ -3,13 +3,13 @@
   <!ENTITY name      "tmuxai">
   <!ENTITY author    "zeddius1983">
   <!ENTITY version   "2024.12.29">
-  <!ENTITY launch    "Settings/tmuxai">
-  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/master">
+  <!ENTITY launch    "Settings/TmuxAI">
+  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/main">
   <!ENTITY pluginURL "&gitURL;/tmuxai.plg">
   <!ENTITY md5       "TBD">
 ]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0">
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" icon="https://tmuxai.dev/_ipx/q_80&amp;s_70x80/logo.svg">
 
 <CHANGES>
 ###2024.12.29
@@ -25,6 +25,35 @@ tmuxai allows you to use AI capabilities directly from your tmux sessions.
 
 <FILE Name="/boot/config/plugins/&name;/&name;.png">
 <URL>&gitURL;/&name;.png</URL>
+</FILE>
+
+<FILE Name="/boot/config/plugins/&name;/setup.sh">
+<URL>&gitURL;/setup.sh</URL>
+</FILE>
+
+<FILE Name="/boot/config/plugins/&name;/config.yaml">
+<INLINE>
+<![CDATA[
+# TmuxAI Example Configuration
+# This is a sample configuration file for tmuxai
+# You can customize it according to your needs
+
+models:
+  glm-4.7:
+    provider: "openrouter"
+    model: "z-ai/glm-4.7"
+    api_key: "YOUR_API_KEY_HERE"
+  kimi-k2.5:
+    provider: "openrouter"
+    model: "moonshotai/kimi-k2.5"
+    api_key: "YOUR_API_KEY_HERE"
+
+# To use this configuration:
+# 1. Replace YOUR_API_KEY_HERE with your actual OpenRouter API key
+# 2. You can add more models as needed
+# 3. For more information, visit https://tmuxai.dev
+]]>
+</INLINE>
 </FILE>
 
 <!--
@@ -64,24 +93,50 @@ echo "Downloading tmuxai for ${TMUXAI_ARCH}..."
 TMUXAI_VERSION="v0.1.0"
 DOWNLOAD_URL="https://github.com/tmuxai/tmuxai/releases/download/${TMUXAI_VERSION}/tmuxai-${TMUXAI_ARCH}"
 
-# Try to download tmuxai
-if ! curl -L -o "${INSTALL_DIR}/tmuxai" "${DOWNLOAD_URL}"; then
-  echo "Failed to download tmuxai. Trying alternative installation method..."
+# Try to download tmuxai binary
+TEMP_FILE="${INSTALL_DIR}/tmuxai.tmp"
+DOWNLOAD_SUCCESS=false
+
+if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>/dev/null; then
+  # Check if downloaded file is not empty and is executable format
+  if [ -s "${TEMP_FILE}" ]; then
+    mv "${TEMP_FILE}" "${INSTALL_DIR}/tmuxai"
+    chmod +x "${INSTALL_DIR}/tmuxai"
+    DOWNLOAD_SUCCESS=true
+    echo "Binary download successful"
+  else
+    rm -f "${TEMP_FILE}"
+    echo "Downloaded file was empty"
+  fi
+else
+  rm -f "${TEMP_FILE}"
+  echo "Failed to download tmuxai binary from GitHub releases"
+fi
+
+# If binary download failed, try pip installation
+if [ "$DOWNLOAD_SUCCESS" = false ]; then
+  echo "Trying alternative installation method using pip..."
   
-  # Alternative: Install using pip if available
   if command -v pip3 &> /dev/null; then
     echo "Installing tmuxai using pip3..."
-    pip3 install tmuxai
+    if pip3 install tmuxai; then
+      echo "Successfully installed tmuxai using pip3"
+    else
+      echo "ERROR: pip3 installation failed"
+      exit 1
+    fi
   elif command -v pip &> /dev/null; then
     echo "Installing tmuxai using pip..."
-    pip install tmuxai
+    if pip install tmuxai; then
+      echo "Successfully installed tmuxai using pip"
+    else
+      echo "ERROR: pip installation failed"
+      exit 1
+    fi
   else
     echo "ERROR: Could not install tmuxai. Neither direct download nor pip available."
     exit 1
   fi
-else
-  # Make binary executable
-  chmod +x "${INSTALL_DIR}/tmuxai"
 fi
 
 # Verify installation

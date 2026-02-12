@@ -45,7 +45,7 @@ ssh root@192.168.1.100
 
 ```bash
 # Download the plugin file from GitHub
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg \
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
 
 # Or if testing a specific branch (e.g., development branch):
@@ -537,7 +537,7 @@ Once testing is successful:
 
 ```bash
 # Install
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
 installplg /boot/config/plugins/tmuxai.plg
 
 # Configure

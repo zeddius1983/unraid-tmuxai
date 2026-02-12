@@ -7,7 +7,7 @@ This guide explains how to submit the TmuxAI plugin to Unraid Community Applicat
 1. ✅ Plugin is working and tested on Unraid
 2. ✅ Repository is hosted on GitHub
 3. ✅ Plugin follows Unraid plugin standards
-4. ✅ All files are on the `master` branch
+4. ✅ All files are on the `main` branch
 
 ## Required Files
 
@@ -35,7 +35,7 @@ Before submitting, test the plugin on an Unraid system:
 
 ```bash
 # Download and install
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
 installplg tmuxai.plg
 
 # Test functionality
@@ -65,8 +65,8 @@ removepkg tmuxai
    ```
    Name: TmuxAI
    Repository: https://github.com/zeddius1983/unraid-tmuxai
-   Plugin: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
-   Icon: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.png
+   Plugin: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
+   Icon: https://tmuxai.dev/_ipx/q_80&s_70x80/logo.svg
    Category: Utilities
    ```
 
@@ -95,7 +95,7 @@ removepkg tmuxai
 Users will be able to install your plugin using:
 
 ```
-https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
+https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
 ```
 
 Or through Community Applications by searching for "tmuxai"
@@ -107,7 +107,7 @@ Or through Community Applications by searching for "tmuxai"
 1. Make changes to your plugin
 2. Update version number in `tmuxai.plg`
 3. Update `CHANGELOG.md`
-4. Commit and push to master branch
+4. Commit and push to main branch
 5. Users will be notified of updates through Community Applications
 
 ### Version Numbering
@@ -156,7 +156,7 @@ Before submitting:
 - [ ] Version number is current
 - [ ] Tested on Unraid 6.9.0+
 - [ ] Repository is public
-- [ ] All files are on master branch
+- [ ] All files are on main branch
 - [ ] No hardcoded paths that won't work on other systems
 - [ ] Error handling is in place
 

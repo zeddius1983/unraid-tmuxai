@@ -23,7 +23,7 @@ This plugin installs [tmuxai](https://github.com/tmuxai/tmuxai), a powerful CLI 
 ssh root@YOUR_UNRAID_IP
 
 # Download and install
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg \
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
 installplg /boot/config/plugins/tmuxai.plg
 
@@ -49,7 +49,7 @@ tmuxai ask "What is Unraid?"
 
 1. Download the plugin file:
    ```bash
-   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
    ```
 
 2. Install the plugin:

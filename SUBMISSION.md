@@ -14,9 +14,9 @@ TmuxAI integrates AI capabilities directly into tmux terminal sessions on Unraid
 ## Repository Information
 
 **GitHub Repository:** https://github.com/zeddius1983/unraid-tmuxai  
-**Branch:** master  
-**Plugin URL:** https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg  
-**Icon URL:** https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.png  
+**Branch:** main  
+**Plugin URL:** https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg  
+**Icon URL:** https://tmuxai.dev/_ipx/q_80&s_70x80/logo.svg  
 
 ## Key Features
 
@@ -48,7 +48,7 @@ TmuxAI integrates AI capabilities directly into tmux terminal sessions on Unraid
 
 ### 2. Manual Installation
 ```bash
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
 installplg tmuxai.plg
 ```
 
@@ -132,8 +132,8 @@ To submit to Community Applications:
    - Plugin name: TmuxAI
    - Category: Utilities
    - Repository: https://github.com/zeddius1983/unraid-tmuxai
-   - Plugin URL: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
-   - Icon URL: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.png
+   - Plugin URL: https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
+   - Icon URL: https://tmuxai.dev/_ipx/q_80&s_70x80/logo.svg
 
 4. **Wait for moderator review**
 

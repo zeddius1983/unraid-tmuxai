@@ -7,7 +7,7 @@
 ssh root@tower
 
 # Download the plugin
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
 
 # Install the plugin
 installplg /boot/config/plugins/tmuxai.plg

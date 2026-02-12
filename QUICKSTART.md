@@ -5,7 +5,7 @@
 ```bash
 # Install via Unraid Community Applications
 # Or manually:
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
 installplg tmuxai.plg
 ```
 
