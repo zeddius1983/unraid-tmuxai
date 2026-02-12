@@ -23,7 +23,7 @@ Before testing, ensure you have:
 - ✅ **AI API key** from one of these providers:
   - OpenAI (https://platform.openai.com/api-keys)
   - Anthropic (https://console.anthropic.com/)
-  - Google AI (https://makersuite.google.com/app/apikey)
+  - Google AI (https://aistudio.google.com/app/apikey)
 
 ## Method 1: Test from GitHub (Development Version)
 
@@ -375,7 +375,7 @@ Use this checklist to ensure comprehensive testing:
 - [ ] API key configuration works
 - [ ] Simple question gets AI response
 - [ ] Works inside tmux session
-- [ ] Tmux keybinding (Ctrl+b, C) works
+- [ ] Tmux keybinding (Ctrl+b, Shift+C) works
 - [ ] Configuration persists after reboot
 - [ ] Plugin shows in Unraid WebGUI (if applicable)
 - [ ] Removal works cleanly
