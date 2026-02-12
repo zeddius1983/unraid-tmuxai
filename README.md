@@ -14,6 +14,27 @@ This plugin installs [tmuxai](https://github.com/tmuxai/tmuxai), a powerful CLI 
 - 💾 Persistent configuration across reboots
 - 🏗️ Support for both x86_64 and ARM64 architectures
 
+## Quick Start for Testing
+
+**Want to test this plugin on your Unraid server?**
+
+```bash
+# SSH to your Unraid server
+ssh root@YOUR_UNRAID_IP
+
+# Download and install
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+installplg /boot/config/plugins/tmuxai.plg
+
+# Configure with setup wizard
+bash /boot/config/plugins/tmuxai/setup.sh
+
+# Test it!
+tmuxai ask "What is Unraid?"
+```
+
+📖 **Full testing guide:** See [TESTING.md](TESTING.md) for detailed instructions, troubleshooting, and best practices.
+
 ## Installation
 
 ### Method 1: Community Applications (Recommended)
@@ -158,6 +179,14 @@ Note: Configuration files are preserved in `/boot/config/plugins/tmuxai` even af
 - Unraid 6.9.0 or later
 - Internet connection for API access
 - API key from supported AI provider
+
+## Testing
+
+Want to test the plugin on your Unraid server? See the comprehensive [Testing Guide](TESTING.md) for:
+- Step-by-step installation instructions
+- Configuration testing
+- Troubleshooting common issues
+- Testing checklist
 
 ## Support
 
