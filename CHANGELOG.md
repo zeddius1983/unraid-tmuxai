@@ -5,6 +5,16 @@ All notable changes to the TmuxAI Unraid plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026.02.12] - 2026-02-12
+
+### Changed
+- Updated tmuxai repository to github.com/alvinunreal/tmuxai (correct repository)
+- Updated tmuxai version from v0.1.0 to v2.1.0 (latest release)
+- Updated download URL to use correct releases page
+
+### Fixed
+- Fixed installation to download from correct GitHub repository
+
 ## [2024.12.29] - 2024-12-29
 
 ### Added

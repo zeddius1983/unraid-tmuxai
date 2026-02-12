@@ -4,7 +4,7 @@ TmuxAI plugin for Unraid - Integrate AI capabilities into your tmux sessions
 
 ## About
 
-This plugin installs [tmuxai](https://github.com/tmuxai/tmuxai), a powerful CLI tool that brings AI assistance directly into your tmux terminal sessions on Unraid. With tmuxai, you can interact with AI models (ChatGPT, Claude, Gemini, etc.) without leaving your terminal.
+This plugin installs [tmuxai](https://github.com/alvinunreal/tmuxai), a powerful CLI tool that brings AI assistance directly into your tmux terminal sessions on Unraid. With tmuxai, you can interact with AI models (ChatGPT, Claude, Gemini, etc.) without leaving your terminal.
 
 ## Features
 
@@ -196,7 +196,7 @@ Want to test the plugin on your Unraid server? See the comprehensive [Testing Gu
 
 ## Credits
 
-- tmuxai project: [https://github.com/tmuxai/tmuxai](https://github.com/tmuxai/tmuxai)
+- tmuxai project: [https://github.com/alvinunreal/tmuxai](https://github.com/alvinunreal/tmuxai)
 - Plugin maintained by: zeddius1983
 
 ## License
