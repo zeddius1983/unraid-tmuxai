@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>tmuxai</Name>
+  <Repository>tmuxai</Repository>
+  <Registry>https://github.com/zeddius1983/unraid-tmuxai</Registry>
+  <Branch>master</Branch>
+  <Support>https://github.com/zeddius1983/unraid-tmuxai/issues</Support>
+  <Project>https://tmuxai.dev</Project>
+  <Overview>
+    TmuxAI integrates AI capabilities directly into your tmux terminal sessions. 
+    Ask questions, get command suggestions, and interact with AI models (ChatGPT, Claude, Gemini) 
+    without leaving your terminal.
+    
+    Features:
+    - AI assistance in tmux sessions
+    - Support for multiple AI providers
+    - Easy configuration
+    - Minimal resource usage
+  </Overview>
+  <Category>Tools:Utilities</Category>
+  <WebUI></WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai-template.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.png</Icon>
+  <Description>
+    TmuxAI brings AI assistance to your tmux terminal sessions on Unraid.
+    
+    [b]Quick Setup:[/b]
+    1. Install the plugin
+    2. Run: bash /boot/config/plugins/tmuxai/setup.sh
+    3. Configure your AI provider API key
+    4. Start using tmuxai in your tmux sessions!
+    
+    [b]Supported AI Providers:[/b]
+    - OpenAI (GPT-3.5, GPT-4)
+    - Anthropic (Claude)
+    - Google (Gemini)
+    - OpenAI-compatible APIs
+    
+    [b]Usage:[/b]
+    - Inside tmux: Press Ctrl+b then C (capital C)
+    - Command line: tmuxai ask "your question"
+    
+    [b]Documentation:[/b]
+    See README.md in the repository for detailed setup and usage instructions.
+  </Description>
+  <Networking>
+    <Mode>host</Mode>
+  </Networking>
+  <Data>
+  </Data>
+  <Environment>
+  </Environment>
+  <Labels>
+  </Labels>
+  <Config Name="API Key Configuration" Target="" Default="" Mode="" Description="Configure your AI provider API key in /boot/config/go or use the setup script" Type="Label" Display="always" Required="false" Mask="false"></Config>
+</Container>
