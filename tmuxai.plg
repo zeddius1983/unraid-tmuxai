@@ -16,6 +16,8 @@
 - Updated tmuxai repository to github.com/alvinunreal/tmuxai
 - Updated tmuxai version to v2.1.0
 - Fixed installation to use correct releases page
+- Fixed download URL to use tar.gz format (tmuxai_Linux_amd64.tar.gz)
+- Added tar.gz extraction logic for proper installation
 
 ###2024.12.29
 - Initial release
@@ -93,10 +95,10 @@ mkdir -p "${CONFIG_DIR}"
 ARCH=$(uname -m)
 case ${ARCH} in
   x86_64)
-    TMUXAI_ARCH="linux-amd64"
+    TMUXAI_ARCH="Linux_amd64"
     ;;
   aarch64)
-    TMUXAI_ARCH="linux-arm64"
+    TMUXAI_ARCH="Linux_arm64"
     ;;
   *)
     echo "Unsupported architecture: ${ARCH}"
@@ -104,43 +106,67 @@ case ${ARCH} in
     ;;
 esac
 
-# Download tmuxai binary
+# Download tmuxai archive
 echo "Downloading tmuxai for ${TMUXAI_ARCH}..."
 TMUXAI_VERSION="v2.1.0"
-DOWNLOAD_URL="https://github.com/alvinunreal/tmuxai/releases/download/${TMUXAI_VERSION}/tmuxai-${TMUXAI_ARCH}"
+DOWNLOAD_URL="https://github.com/alvinunreal/tmuxai/releases/download/${TMUXAI_VERSION}/tmuxai_${TMUXAI_ARCH}.tar.gz"
 
-# Try to download tmuxai binary
-TEMP_FILE="${INSTALL_DIR}/tmuxai.tmp"
+# Try to download tmuxai archive
+TEMP_DIR="${PLUGIN_DIR}/tmuxai_download"
+TEMP_FILE="${TEMP_DIR}/tmuxai.tar.gz"
 DOWNLOAD_SUCCESS=false
 ERROR_LOG="${PLUGIN_DIR}/download_error.log"
 
+# Create temporary directory
+mkdir -p "${TEMP_DIR}"
+
 if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>"${ERROR_LOG}"; then
-  # Check if downloaded file is not empty and is a valid executable
+  # Check if downloaded file is not empty and is a valid gzip archive
   if [ -s "${TEMP_FILE}" ]; then
-    # Verify it's an ELF executable binary (more specific check)
+    # Verify it's a gzip archive
     FILE_TYPE=$(file "${TEMP_FILE}" 2>/dev/null)
-    if echo "${FILE_TYPE}" | grep -q "ELF.*executable"; then
-      mv "${TEMP_FILE}" "${INSTALL_DIR}/tmuxai"
-      chmod +x "${INSTALL_DIR}/tmuxai"
-      DOWNLOAD_SUCCESS=true
-      echo "Binary download successful"
-      rm -f "${ERROR_LOG}"
+    if echo "${FILE_TYPE}" | grep -q "gzip compressed data"; then
+      # Extract the archive
+      echo "Extracting tmuxai archive..."
+      if tar -xzf "${TEMP_FILE}" -C "${TEMP_DIR}" 2>"${ERROR_LOG}"; then
+        # Find the tmuxai binary in the extracted files
+        TMUXAI_BINARY=$(find "${TEMP_DIR}" -name "tmuxai" -type f 2>/dev/null | head -n 1)
+        if [ -n "${TMUXAI_BINARY}" ] && [ -f "${TMUXAI_BINARY}" ]; then
+          # Verify it's an executable
+          if file "${TMUXAI_BINARY}" 2>/dev/null | grep -q "ELF.*executable"; then
+            mv "${TMUXAI_BINARY}" "${INSTALL_DIR}/tmuxai"
+            chmod +x "${INSTALL_DIR}/tmuxai"
+            DOWNLOAD_SUCCESS=true
+            echo "Binary extraction and installation successful"
+            rm -f "${ERROR_LOG}"
+          else
+            echo "Extracted file is not a valid ELF executable binary"
+          fi
+        else
+          echo "Could not find tmuxai binary in extracted archive"
+        fi
+      else
+        echo "Failed to extract archive"
+        if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
+          echo "Extraction error: $(cat "${ERROR_LOG}")"
+        fi
+      fi
     else
-      rm -f "${TEMP_FILE}"
-      echo "Downloaded file is not a valid ELF executable binary"
+      echo "Downloaded file is not a valid gzip archive"
       echo "File type: ${FILE_TYPE}"
     fi
   else
-    rm -f "${TEMP_FILE}"
     echo "Downloaded file was empty"
   fi
 else
-  rm -f "${TEMP_FILE}"
-  echo "Failed to download tmuxai binary from GitHub releases"
+  echo "Failed to download tmuxai archive from GitHub releases"
   if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
     echo "Error details: $(cat "${ERROR_LOG}")"
   fi
 fi
+
+# Clean up temporary directory
+rm -rf "${TEMP_DIR}"
 
 # If binary download failed, try pip installation
 if [ "$DOWNLOAD_SUCCESS" = false ]; then
