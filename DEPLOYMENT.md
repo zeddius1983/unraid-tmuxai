@@ -6,7 +6,7 @@ This guide helps you deploy and maintain the TmuxAI Unraid plugin.
 
 Before making the repository public or submitting to Community Apps:
 
-- [x] All files committed to master branch
+- [x] All files committed to main branch
 - [x] Plugin file tested and validated
 - [x] Documentation is complete and accurate
 - [x] License is in place
@@ -30,7 +30,7 @@ Before making the repository public or submitting to Community Apps:
 For hosting additional documentation:
 - Go to Settings → Pages
 - Source: Deploy from branch
-- Branch: master / (root)
+- Branch: main / (root)
 
 ### 3. Configure Repository Settings
 
@@ -62,7 +62,7 @@ https://github.com/zeddius1983/unraid-tmuxai
    ssh root@your-unraid-ip
    
    # Download plugin
-   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
    
    # Install
    installplg /boot/config/plugins/tmuxai.plg
@@ -161,7 +161,7 @@ When creating updates:
    ```bash
    git add tmuxai.plg CHANGELOG.md
    git commit -m "Version YYYY.MM.DD - Description"
-   git push origin master
+   git push origin main
    ```
 
 5. **Tag the release** (optional but recommended):
@@ -235,14 +235,14 @@ If tmuxai releases a new version:
 1. Update download URL in tmuxai.plg
 2. Test installation
 3. Update version and changelog
-4. Push to master
+4. Push to main
 
 ### Fixing Bugs
 
 1. Create issue on GitHub
 2. Fix in a branch
 3. Test on Unraid
-4. Merge to master
+4. Merge to main
 5. Update version
 
 ### Adding Features

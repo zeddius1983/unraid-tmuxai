@@ -4,7 +4,7 @@ TmuxAI plugin for Unraid - Integrate AI capabilities into your tmux sessions
 
 ## About
 
-This plugin installs [tmuxai](https://github.com/tmuxai/tmuxai), a powerful CLI tool that brings AI assistance directly into your tmux terminal sessions on Unraid. With tmuxai, you can interact with AI models (ChatGPT, Claude, Gemini, etc.) without leaving your terminal.
+This plugin installs [tmuxai](https://github.com/alvinunreal/tmuxai), a powerful CLI tool that brings AI assistance directly into your tmux terminal sessions on Unraid. With tmuxai, you can interact with AI models (ChatGPT, Claude, Gemini, etc.) without leaving your terminal.
 
 ## Features
 
@@ -23,7 +23,7 @@ This plugin installs [tmuxai](https://github.com/tmuxai/tmuxai), a powerful CLI 
 ssh root@YOUR_UNRAID_IP
 
 # Download and install
-wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg \
+wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
 installplg /boot/config/plugins/tmuxai.plg
 
@@ -49,7 +49,7 @@ tmuxai ask "What is Unraid?"
 
 1. Download the plugin file:
    ```bash
-   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/master/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+   wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
    ```
 
 2. Install the plugin:
@@ -196,7 +196,7 @@ Want to test the plugin on your Unraid server? See the comprehensive [Testing Gu
 
 ## Credits
 
-- tmuxai project: [https://github.com/tmuxai/tmuxai](https://github.com/tmuxai/tmuxai)
+- tmuxai project: [https://github.com/alvinunreal/tmuxai](https://github.com/alvinunreal/tmuxai)
 - Plugin maintained by: zeddius1983
 
 ## License
