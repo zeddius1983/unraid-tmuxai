@@ -36,27 +36,33 @@ tmuxai allows you to use AI capabilities directly from your tmux sessions.
 <![CDATA[
 # TmuxAI Example Configuration
 # This is a sample configuration file for tmuxai
-# You can customize it according to your needs
-#
+# 
 # SECURITY WARNING: This file may contain sensitive API keys!
 # - Do NOT commit this file to version control with real API keys
 # - Keep your API keys secure and private
 # - Consider using environment variables for production use
+#
+# IMPORTANT: You MUST customize this configuration before use!
+# Replace "YOUR_API_KEY_HERE" with your actual API keys
 
-models:
-  glm-4.7:
-    provider: "openrouter"
-    model: "z-ai/glm-4.7"
-    api_key: "YOUR_API_KEY_HERE"
-  kimi-k2.5:
-    provider: "openrouter"
-    model: "moonshotai/kimi-k2.5"
-    api_key: "YOUR_API_KEY_HERE"
+# Example configuration with OpenRouter models:
+# Uncomment and customize the models you want to use
+
+# models:
+#   glm-4.7:
+#     provider: "openrouter"
+#     model: "z-ai/glm-4.7"
+#     api_key: "YOUR_API_KEY_HERE"
+#   kimi-k2.5:
+#     provider: "openrouter"
+#     model: "moonshotai/kimi-k2.5"
+#     api_key: "YOUR_API_KEY_HERE"
 
 # To use this configuration:
-# 1. Replace YOUR_API_KEY_HERE with your actual OpenRouter API key
-# 2. You can add more models as needed
-# 3. For more information, visit https://tmuxai.dev
+# 1. Uncomment the models section above
+# 2. Replace YOUR_API_KEY_HERE with your actual OpenRouter API key
+# 3. You can add more models as needed
+# 4. For more information, visit https://tmuxai.dev
 ]]>
 </INLINE>
 </FILE>
@@ -101,19 +107,23 @@ DOWNLOAD_URL="https://github.com/tmuxai/tmuxai/releases/download/${TMUXAI_VERSIO
 # Try to download tmuxai binary
 TEMP_FILE="${INSTALL_DIR}/tmuxai.tmp"
 DOWNLOAD_SUCCESS=false
+ERROR_LOG="${PLUGIN_DIR}/download_error.log"
 
-if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>/dev/null; then
+if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>"${ERROR_LOG}"; then
   # Check if downloaded file is not empty and is a valid executable
   if [ -s "${TEMP_FILE}" ]; then
-    # Verify it's an executable binary (check for ELF magic number on Linux)
-    if file "${TEMP_FILE}" 2>/dev/null | grep -q -E "executable|ELF"; then
+    # Verify it's an ELF executable binary (more specific check)
+    FILE_TYPE=$(file "${TEMP_FILE}" 2>/dev/null)
+    if echo "${FILE_TYPE}" | grep -q "ELF.*executable"; then
       mv "${TEMP_FILE}" "${INSTALL_DIR}/tmuxai"
       chmod +x "${INSTALL_DIR}/tmuxai"
       DOWNLOAD_SUCCESS=true
       echo "Binary download successful"
+      rm -f "${ERROR_LOG}"
     else
       rm -f "${TEMP_FILE}"
-      echo "Downloaded file is not a valid executable binary"
+      echo "Downloaded file is not a valid ELF executable binary"
+      echo "File type: ${FILE_TYPE}"
     fi
   else
     rm -f "${TEMP_FILE}"
@@ -122,6 +132,9 @@ if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>/dev/null; then
 else
   rm -f "${TEMP_FILE}"
   echo "Failed to download tmuxai binary from GitHub releases"
+  if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
+    echo "Error details: $(cat ${ERROR_LOG})"
+  fi
 fi
 
 # If binary download failed, try pip installation
