@@ -9,7 +9,11 @@
   <!ENTITY md5       "TBD">
 ]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" icon="https://tmuxai.dev/_ipx/q_80&amp;s_70x80/logo.svg">
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" support="https://github.com/&author;/unraid-&name;/issues" icon="&gitURL;/&name;.png" pluginName="TmuxAI">
+
+<DESCRIPTION>
+TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal. Perfect for getting command help, code suggestions, and quick answers while working in Unraid.
+</DESCRIPTION>
 
 <CHANGES>
 ###2026.02.12
