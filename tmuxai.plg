@@ -1,0 +1,164 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name      "tmuxai">
+  <!ENTITY author    "zeddius1983">
+  <!ENTITY version   "2024.12.29">
+  <!ENTITY launch    "Settings/tmuxai">
+  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/master">
+  <!ENTITY pluginURL "&gitURL;/tmuxai.plg">
+  <!ENTITY md5       "TBD">
+]>
+
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0">
+
+<CHANGES>
+###2024.12.29
+- Initial release
+- Install tmuxai CLI tool
+- Support for Unraid 6.9.0+
+</CHANGES>
+
+<!--
+This plugin installs tmuxai, a CLI tool that integrates AI into tmux.
+tmuxai allows you to use AI capabilities directly from your tmux sessions.
+-->
+
+<FILE Name="/boot/config/plugins/&name;/&name;.png">
+<URL>&gitURL;/&name;.png</URL>
+</FILE>
+
+<!--
+Install script
+-->
+<FILE Run="/bin/bash">
+<INLINE>
+<![CDATA[
+#!/bin/bash
+
+PLUGIN_NAME="tmuxai"
+PLUGIN_DIR="/boot/config/plugins/${PLUGIN_NAME}"
+INSTALL_DIR="/usr/local/bin"
+CONFIG_DIR="/boot/config/plugins/${PLUGIN_NAME}/config"
+
+# Create directories
+mkdir -p "${PLUGIN_DIR}"
+mkdir -p "${CONFIG_DIR}"
+
+# Detect architecture
+ARCH=$(uname -m)
+case ${ARCH} in
+  x86_64)
+    TMUXAI_ARCH="linux-amd64"
+    ;;
+  aarch64)
+    TMUXAI_ARCH="linux-arm64"
+    ;;
+  *)
+    echo "Unsupported architecture: ${ARCH}"
+    exit 1
+    ;;
+esac
+
+# Download tmuxai binary
+echo "Downloading tmuxai for ${TMUXAI_ARCH}..."
+TMUXAI_VERSION="v0.1.0"
+DOWNLOAD_URL="https://github.com/tmuxai/tmuxai/releases/download/${TMUXAI_VERSION}/tmuxai-${TMUXAI_ARCH}"
+
+# Try to download tmuxai
+if ! curl -L -o "${INSTALL_DIR}/tmuxai" "${DOWNLOAD_URL}"; then
+  echo "Failed to download tmuxai. Trying alternative installation method..."
+  
+  # Alternative: Install using pip if available
+  if command -v pip3 &> /dev/null; then
+    echo "Installing tmuxai using pip3..."
+    pip3 install tmuxai
+  elif command -v pip &> /dev/null; then
+    echo "Installing tmuxai using pip..."
+    pip install tmuxai
+  else
+    echo "ERROR: Could not install tmuxai. Neither direct download nor pip available."
+    exit 1
+  fi
+else
+  # Make binary executable
+  chmod +x "${INSTALL_DIR}/tmuxai"
+fi
+
+# Verify installation
+if command -v tmuxai &> /dev/null; then
+  echo "tmuxai installed successfully!"
+  tmuxai --version 2>/dev/null || echo "tmuxai is installed and ready to use"
+else
+  echo "WARNING: tmuxai installation completed but binary not found in PATH"
+fi
+
+# Create a simple configuration file
+cat > "${CONFIG_DIR}/README.txt" << 'EOF'
+TmuxAI Configuration
+====================
+
+To use tmuxai, you need to set up your AI provider credentials.
+
+Supported providers:
+- OpenAI (ChatGPT)
+- Anthropic (Claude)
+- Google (Gemini)
+- Other OpenAI-compatible APIs
+
+Setup:
+1. Set your API key as an environment variable:
+   export OPENAI_API_KEY="your-api-key-here"
+   
+   Or for other providers:
+   export ANTHROPIC_API_KEY="your-api-key-here"
+
+2. Use tmuxai in your tmux sessions:
+   - Press prefix + C (capital C) to ask AI a question
+   - Or run: tmuxai ask "your question"
+
+For more information, visit: https://github.com/tmuxai/tmuxai
+EOF
+
+echo "TmuxAI plugin installation complete!"
+echo "See ${CONFIG_DIR}/README.txt for configuration instructions."
+
+]]>
+</INLINE>
+</FILE>
+
+<!--
+Remove script
+-->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+<![CDATA[
+#!/bin/bash
+
+PLUGIN_NAME="tmuxai"
+INSTALL_DIR="/usr/local/bin"
+
+# Remove tmuxai binary
+if [ -f "${INSTALL_DIR}/tmuxai" ]; then
+  rm -f "${INSTALL_DIR}/tmuxai"
+  echo "Removed tmuxai binary"
+fi
+
+# Try to uninstall if it was installed via pip
+if command -v pip3 &> /dev/null; then
+  pip3 uninstall -y tmuxai 2>/dev/null || true
+fi
+
+if command -v pip &> /dev/null; then
+  pip uninstall -y tmuxai 2>/dev/null || true
+fi
+
+# Note: We keep the config directory in /boot/config/plugins/tmuxai
+# so user settings persist across plugin reinstalls
+echo "TmuxAI plugin removed successfully!"
+echo "Configuration preserved in /boot/config/plugins/${PLUGIN_NAME}"
+
+]]>
+</INLINE>
+</FILE>
+
+</PLUGIN>

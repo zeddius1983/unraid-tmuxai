@@ -1,0 +1,36 @@
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+create_icon.py
+
+# Log files
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Backup files
+*.bak
+*.backup
+
+# Test files
+test/
+tests/
+*.test
+
+# SVG source (keep only PNG)
+*.svg
+*.png.svg
