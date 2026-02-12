@@ -1,15 +1,12 @@
 <?xml version='1.0' standalone='yes'?>
-<!DOCTYPE PLUGIN [
-  <!ENTITY name      "tmuxai">
-  <!ENTITY author    "zeddius1983">
-  <!ENTITY version   "2026.02.12">
-  <!ENTITY launch    "Settings/TmuxAI">
-  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/main">
-  <!ENTITY pluginURL "&gitURL;/tmuxai.plg">
-  <!ENTITY md5       "TBD">
-]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" support="https://github.com/&author;/unraid-&name;/issues" icon="&gitURL;/&name;.png" pluginName="TmuxAI">
+<!--
+  TmuxAI Plugin for Unraid
+  Author: zeddius1983
+  Repository: https://github.com/zeddius1983/unraid-tmuxai
+-->
+
+<PLUGIN name="tmuxai" author="zeddius1983" version="2026.02.12" launch="Settings/TmuxAI" pluginURL="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg" min="6.9.0" support="https://github.com/zeddius1983/unraid-tmuxai/issues" icon="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png" pluginName="TmuxAI">
 
 <DESCRIPTION>
 TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal. Perfect for getting command help, code suggestions, and quick answers while working in Unraid.
@@ -17,6 +14,8 @@ TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. 
 
 <CHANGES>
 ###2026.02.12
+- Updated plugin header to remove !ENTITY declarations (use inline values)
+- Created new custom TmuxAI icon with terminal splits and AI elements
 - Updated tmuxai repository to github.com/alvinunreal/tmuxai
 - Updated tmuxai version to v2.1.0
 - Fixed installation to use correct releases page
@@ -34,15 +33,15 @@ This plugin installs tmuxai, a CLI tool that integrates AI into tmux.
 tmuxai allows you to use AI capabilities directly from your tmux sessions.
 -->
 
-<FILE Name="/boot/config/plugins/&name;/&name;.png">
-<URL>&gitURL;/&name;.png</URL>
+<FILE Name="/boot/config/plugins/tmuxai/tmuxai.png">
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
 </FILE>
 
-<FILE Name="/boot/config/plugins/&name;/setup.sh">
-<URL>&gitURL;/setup.sh</URL>
+<FILE Name="/boot/config/plugins/tmuxai/setup.sh">
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/setup.sh</URL>
 </FILE>
 
-<FILE Name="/boot/config/plugins/&name;/config.yaml">
+<FILE Name="/boot/config/plugins/tmuxai/config.yaml">
 <INLINE>
 <![CDATA[
 # TmuxAI Example Configuration
