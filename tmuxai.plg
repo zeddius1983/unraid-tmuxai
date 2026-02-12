@@ -133,7 +133,7 @@ else
   rm -f "${TEMP_FILE}"
   echo "Failed to download tmuxai binary from GitHub releases"
   if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
-    echo "Error details: $(cat ${ERROR_LOG})"
+    echo "Error details: $(cat "${ERROR_LOG}")"
   fi
 fi
 
