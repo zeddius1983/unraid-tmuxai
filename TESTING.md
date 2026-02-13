@@ -243,6 +243,13 @@ tmuxai ask "Test Anthropic"
 ls -la /boot/config/plugins/tmuxai/
 ls -la /boot/config/plugins/tmuxai/config/
 
+# Verify the symlink was created
+ls -la /root/.config/tmuxai
+# Should show: tmuxai -> /boot/config/plugins/tmuxai/config/.config/tmuxai
+
+# Check persisted config directory
+ls -la /boot/config/plugins/tmuxai/config/.config/tmuxai/
+
 # View the README
 cat /boot/config/plugins/tmuxai/config/README.txt
 ```
@@ -255,7 +262,18 @@ reboot
 
 # After reboot, SSH back in and test
 ssh root@YOUR_UNRAID_IP
+
+# Verify symlink still exists (it should be recreated on boot)
+ls -la /root/.config/tmuxai
+# Should show: tmuxai -> /boot/config/plugins/tmuxai/config/.config/tmuxai
+
+# Test that your config persisted
 tmuxai ask "Test after reboot"
+
+# If you created any config files, verify they still exist
+ls -la /root/.config/tmuxai/
+# or
+ls -la /boot/config/plugins/tmuxai/config/.config/tmuxai/
 ```
 
 ## Troubleshooting

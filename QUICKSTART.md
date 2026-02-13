@@ -47,7 +47,10 @@ Inside a tmux session:
 
 - Plugin config: `/boot/config/plugins/tmuxai/`
 - User config: `/boot/config/plugins/tmuxai/config/.tmuxairc`
+- tmuxai config: `/root/.config/tmuxai/` (symlink to `/boot/config/plugins/tmuxai/config/.config/tmuxai`)
 - Binary location: `/usr/local/bin/tmuxai`
+
+**Note:** The plugin creates a symlink from `/root/.config/tmuxai` to `/boot/config/plugins/tmuxai/config/.config/tmuxai` to ensure your tmuxai configuration persists across Unraid reboots.
 
 ## Environment Variables
 
