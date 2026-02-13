@@ -13,6 +13,12 @@ TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. 
 </DESCRIPTION>
 
 <CHANGES>
+###2026.02.13c
+- Fixed save functionality - implemented AJAX-based save with proper feedback
+- Fixed icon not appearing in User Utilities section (changed Menu to "Utilities" with Type="xmenu")
+- Added proper JavaScript save handler with SweetAlert notifications
+- Configuration saves now work correctly without page refresh
+
 ###2026.02.13b
 - Removed setup.sh script - simplified configuration
 - Added Settings tab to view/edit config.yaml directly in the UI
@@ -60,6 +66,10 @@ tmuxai allows you to use AI capabilities directly from your tmux sessions.
 
 <FILE Name="/usr/local/emhttp/plugins/tmuxai/tmuxai.png">
 <URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/tmuxai/include/tmuxai_save.php">
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/source/usr/local/emhttp/plugins/tmuxai/include/tmuxai_save.php</URL>
 </FILE>
 
 <FILE Name="/boot/config/plugins/tmuxai/config/config.yaml">

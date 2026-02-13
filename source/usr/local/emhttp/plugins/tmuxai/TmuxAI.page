@@ -1,6 +1,9 @@
-Menu="UserUtilities"
+Menu="Utilities"
+Type="xmenu"
 Title="TmuxAI"
 Icon="tmuxai.png"
+Tag="terminal"
+Markdown="false"
 ---
 <?php
 require_once '/usr/local/emhttp/webGui/include/Helpers.php';
@@ -13,29 +16,7 @@ if (!is_dir($config_dir)) {
     mkdir($config_dir, 0755, true);
 }
 
-// Handle form submission
-if ($_POST['action'] == 'save') {
-    // CSRF protection - Unraid webGui includes this automatically via session
-    // Validate that the request is from the webGui
-    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
-        $error = "Invalid request origin";
-    } else {
-        $config_content = $_POST['config_content'] ?? '';
-        
-        // Save configuration without validation
-        // Note: YAML validation removed because python3 is not available by default in Unraid
-        file_put_contents($config_file, $config_content);
-        $saved = true;
-        // Redirect to prevent form resubmission and show success message
-        header('Location: ' . $_SERVER['REQUEST_URI'] . '?saved=1');
-        exit;
-    }
-}
-
-// Check for saved parameter from redirect
-if (isset($_GET['saved']) && $_GET['saved'] == '1') {
-    $saved = true;
-}
+// Note: Save handling is now done via AJAX (see JavaScript section below)
 
 // Read current config
 $config_content = '';
@@ -215,18 +196,6 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 </style>
 
 <div class="tmuxai-container">
-    <?php if (isset($saved) && $saved): ?>
-    <div class="success-message">
-        ✓ Configuration saved successfully!
-    </div>
-    <?php endif; ?>
-    
-    <?php if (isset($error) && $error): ?>
-    <div class="error-message">
-        ✗ Error: <?= htmlspecialchars($error) ?>
-    </div>
-    <?php endif; ?>
-
     <div class="tmuxai-section">
         <h2>TmuxAI Configuration</h2>
         
@@ -242,12 +211,11 @@ if (file_exists('/usr/local/bin/tmuxai')) {
         </div>
         <?php endif; ?>
 
-        <form method="POST">
-            <input type="hidden" name="action" value="save">
-            <textarea name="config_content" class="config-editor" spellcheck="false"><?= htmlspecialchars($config_content) ?></textarea>
+        <form id="tmuxai-config-form" method="POST">
+            <textarea id="config_content" name="config_content" class="config-editor" spellcheck="false"><?= htmlspecialchars($config_content) ?></textarea>
             
             <div class="button-group">
-                <button type="submit" class="btn btn-primary">Save Configuration</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Save Configuration</button>
                 <button type="button" class="btn btn-secondary" onclick="location.reload();">Reload</button>
             </div>
         </form>
@@ -285,3 +253,52 @@ if (file_exists('/usr/local/bin/tmuxai')) {
         </ul>
     </div>
 </div>
+
+<script type="text/javascript">
+$(function() {
+    $('#btnSave').click(function() {
+        var configContent = $('#config_content').val();
+        
+        $.post('/plugins/tmuxai/include/tmuxai_save.php', {
+            config_content: configContent
+        }, function(data) {
+            var Title = 'Configuration ';
+
+            if(data.success && data.success.response) {
+                swal({
+                    title: Title + 'Saved',
+                    text: 'The configuration was saved successfully:<br><br><span style="font-weight:bold;">' + data.success.response + '</span>',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    html: true,
+                    type: 'success'
+                }, function() {
+                    // Configuration saved, stay on the page
+                });
+            } else if(data.error && data.error.response) {
+                swal({
+                    title: Title + 'Error',
+                    text: 'There was an error saving the configuration:<br><br><span style="font-weight:bold;">' + data.error.response + '</span>',
+                    html: true,
+                    type: 'error'
+                });
+            } else {
+                swal({
+                    title: Title + 'Error',
+                    text: 'There was an unknown error saving the configuration.',
+                    html: true,
+                    type: 'error'
+                });
+            }
+        }, 'json').fail(function() {
+            swal({
+                title: 'Configuration Error',
+                text: 'Failed to communicate with the server. Please try again.',
+                html: true,
+                type: 'error'
+            });
+        });
+    });
+});
+</script>
+
