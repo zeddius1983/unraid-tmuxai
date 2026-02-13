@@ -1,0 +1,266 @@
+Menu="Settings"
+Title="TmuxAI"
+Icon="tmuxai.png"
+---
+<?php
+require_once '/usr/local/emhttp/webGui/include/Helpers.php';
+
+$config_file = '/boot/config/plugins/tmuxai/config/config.yaml';
+$config_dir = '/boot/config/plugins/tmuxai/config';
+
+// Ensure config directory exists
+if (!is_dir($config_dir)) {
+    mkdir($config_dir, 0755, true);
+}
+
+// Handle form submission
+if ($_POST['action'] == 'save') {
+    // CSRF protection - Unraid webGui includes this automatically via session
+    // Validate that the request is from the webGui
+    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
+        $error = "Invalid request origin";
+    } else {
+        $config_content = $_POST['config_content'] ?? '';
+        
+        // Validate YAML syntax before saving
+        $validation_error = null;
+        if (!empty($config_content)) {
+            // Create a temporary file for validation
+            $temp_file = tempnam(sys_get_temp_dir(), 'tmuxai_yaml_');
+            file_put_contents($temp_file, $config_content);
+            
+            // Try to validate YAML syntax using Python
+            exec("python3 -c \"import yaml; yaml.safe_load(open('$temp_file'))\" 2>&1", $output, $return_code);
+            unlink($temp_file);
+            
+            if ($return_code !== 0) {
+                $validation_error = "YAML syntax error. Please check your configuration.";
+            }
+        }
+        
+        if ($validation_error) {
+            $error = $validation_error;
+        } else {
+            file_put_contents($config_file, $config_content);
+            $saved = true;
+        }
+    }
+}
+
+// Read current config
+$config_content = '';
+if (file_exists($config_file)) {
+    $config_content = file_get_contents($config_file);
+} else {
+    // Use default sample config
+    $config_content = <<<'EOT'
+# TmuxAI Example Configuration
+# This is a sample configuration file for tmuxai
+# 
+# SECURITY WARNING: This file may contain sensitive API keys!
+# - Do NOT commit this file to version control with real API keys
+# - Keep your API keys secure and private
+# - Consider using environment variables for production use
+#
+# IMPORTANT: You MUST customize this configuration before use!
+# Replace "YOUR_API_KEY_HERE" with your actual API keys
+
+# Example configuration with OpenRouter models:
+# Uncomment and customize the models you want to use
+
+# models:
+#   glm-4.7:
+#     provider: "openrouter"
+#     model: "z-ai/glm-4.7"
+#     api_key: "YOUR_API_KEY_HERE"
+#   kimi-k2.5:
+#     provider: "openrouter"
+#     model: "moonshotai/kimi-k2.5"
+#     api_key: "YOUR_API_KEY_HERE"
+
+# To use this configuration:
+# 1. Uncomment the models section above
+# 2. Replace YOUR_API_KEY_HERE with your actual OpenRouter API key
+# 3. You can add more models as needed
+# 4. For more information, visit https://tmuxai.dev
+EOT;
+}
+
+$version_output = '';
+if (file_exists('/usr/local/bin/tmuxai')) {
+    exec('/usr/local/bin/tmuxai --version 2>&1', $version_lines);
+    $version_output = implode("\n", $version_lines);
+}
+?>
+
+<style>
+.tmuxai-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.tmuxai-section {
+    background: #f6f6f6;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.tmuxai-section h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 2px solid #ff8c00;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.config-editor {
+    width: 100%;
+    min-height: 400px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.button-group {
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: #ff8c00;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #e67e00;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.success-message {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.version-info {
+    font-family: monospace;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+</style>
+
+<div class="tmuxai-container">
+    <?php if (isset($saved) && $saved): ?>
+    <div class="success-message">
+        ✓ Configuration saved successfully!
+    </div>
+    <?php endif; ?>
+    
+    <?php if (isset($error) && $error): ?>
+    <div class="error-message">
+        ✗ Error: <?= htmlspecialchars($error) ?>
+    </div>
+    <?php endif; ?>
+
+    <div class="tmuxai-section">
+        <h2>TmuxAI Configuration</h2>
+        
+        <div class="info-box">
+            <strong>Configuration File:</strong> <?= htmlspecialchars($config_file) ?><br>
+            <strong>Info:</strong> Edit your tmuxai configuration below. This file persists across Unraid reboots.
+        </div>
+
+        <?php if ($version_output): ?>
+        <div class="version-info">
+            <strong>Installed Version:</strong><br>
+            <?= htmlspecialchars($version_output) ?>
+        </div>
+        <?php endif; ?>
+
+        <form method="POST">
+            <input type="hidden" name="action" value="save">
+            <textarea name="config_content" class="config-editor" spellcheck="false"><?= htmlspecialchars($config_content) ?></textarea>
+            
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Save Configuration</button>
+                <button type="button" class="btn btn-secondary" onclick="location.reload();">Reload</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="tmuxai-section">
+        <h2>About TmuxAI</h2>
+        <p>
+            TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. 
+            Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal.
+        </p>
+        
+        <h3>Quick Start:</h3>
+        <ol>
+            <li>Configure your AI provider API keys in the configuration above</li>
+            <li>Start tmux: <code>tmux</code></li>
+            <li>Press <code>prefix + C</code> (capital C) to ask AI a question</li>
+            <li>Or use the command: <code>tmuxai ask "your question"</code></li>
+        </ol>
+
+        <h3>Supported Providers:</h3>
+        <ul>
+            <li>OpenAI (ChatGPT)</li>
+            <li>Anthropic (Claude)</li>
+            <li>Google (Gemini)</li>
+            <li>OpenRouter</li>
+            <li>Other OpenAI-compatible APIs</li>
+        </ul>
+
+        <h3>Resources:</h3>
+        <ul>
+            <li><a href="https://tmuxai.dev" target="_blank">TmuxAI Documentation</a></li>
+            <li><a href="https://github.com/alvinunreal/tmuxai" target="_blank">TmuxAI on GitHub</a></li>
+            <li><a href="https://github.com/zeddius1983/unraid-tmuxai" target="_blank">Plugin Repository</a></li>
+        </ul>
+    </div>
+</div>

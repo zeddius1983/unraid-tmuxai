@@ -56,16 +56,16 @@ echo ""
 
 # Test 3: Check required plugin elements
 echo "Test 3: Required plugin elements"
-if grep -q "<!ENTITY name" tmuxai.plg; then
-    pass "Plugin name entity defined"
+if grep -q 'name="tmuxai"' tmuxai.plg; then
+    pass "Plugin name defined"
 else
-    fail "Plugin name entity missing"
+    fail "Plugin name missing"
 fi
 
-if grep -q "<!ENTITY version" tmuxai.plg; then
-    pass "Plugin version entity defined"
+if grep -q 'version=' tmuxai.plg; then
+    pass "Plugin version defined"
 else
-    fail "Plugin version entity missing"
+    fail "Plugin version missing"
 fi
 
 if grep -q "<CHANGES>" tmuxai.plg; then
@@ -100,26 +100,33 @@ for doc in README.md CHANGELOG.md LICENSE CONTRIBUTING.md QUICKSTART.md; do
 done
 echo ""
 
-# Test 6: Check setup script
-echo "Test 6: Setup script"
-if [ -f "setup.sh" ]; then
-    pass "Setup script exists"
-    if [ -x "setup.sh" ]; then
-        pass "Setup script is executable"
-    else
-        warn "Setup script is not executable (run: chmod +x setup.sh)"
-    fi
+# Test 6: Check Settings page
+echo "Test 6: Settings page"
+if [ -f "source/usr/local/emhttp/plugins/tmuxai/TmuxAI.page" ]; then
+    pass "Settings page exists"
 else
-    fail "Setup script missing"
+    fail "Settings page missing"
+fi
+
+if [ -f "source/usr/local/emhttp/plugins/tmuxai/README.md" ]; then
+    pass "Plugin README exists"
+else
+    fail "Plugin README missing"
+fi
+
+if [ -f "source/usr/local/emhttp/plugins/tmuxai/tmuxai.png" ]; then
+    pass "Plugin icon exists in emhttp directory"
+else
+    fail "Plugin icon missing in emhttp directory"
 fi
 echo ""
 
-# Test 7: Validate script syntax
-echo "Test 7: Script syntax validation"
-if bash -n setup.sh 2>/dev/null; then
-    pass "setup.sh has valid syntax"
+# Test 7: Validate plugin structure
+echo "Test 7: Plugin structure validation"
+if grep -q "TmuxAI.page" tmuxai.plg; then
+    pass "Settings page referenced in plugin"
 else
-    fail "setup.sh has syntax errors"
+    fail "Settings page not referenced in plugin"
 fi
 echo ""
 
@@ -127,17 +134,17 @@ echo ""
 echo "Test 8: Common issues check"
 
 # Check for hardcoded paths that might not work
-if grep -q "/mnt/user" tmuxai.plg setup.sh 2>/dev/null; then
+if grep -q "/mnt/user" tmuxai.plg 2>/dev/null; then
     warn "Found hardcoded /mnt/user path - may not work on all systems"
 else
     pass "No hardcoded user paths found"
 fi
 
-# Check for proper error handling
-if grep -q "set -e" setup.sh; then
-    pass "Setup script has error handling (set -e)"
+# Check config file is referenced
+if grep -q "config.yaml" tmuxai.plg; then
+    pass "Config file referenced in plugin"
 else
-    warn "Setup script missing 'set -e' for error handling"
+    warn "Config file not referenced in plugin"
 fi
 
 # Check for proper cleanup
