@@ -32,7 +32,7 @@ installplg /boot/config/plugins/tmuxai.plg
 plugin install /boot/config/plugins/tmuxai.plg
 
 # Configure your API key
-# Option 1: Via Settings tab in Unraid WebGUI (Settings > TmuxAI)
+# Option 1: Via User Utilities in Unraid WebGUI (Settings > User Utilities > TmuxAI)
 # Option 2: Edit config file directly
 nano /boot/config/plugins/tmuxai/config/config.yaml
 
@@ -74,7 +74,7 @@ After installation, you need to configure your AI provider credentials:
 ### Option 1: Via Unraid WebGUI (Recommended)
 
 1. Open Unraid WebGUI
-2. Go to **Settings** > **TmuxAI**
+2. Go to **Settings** > **User Utilities** > **TmuxAI**
 3. Edit the `config.yaml` file in the configuration editor
 4. Add your AI provider configuration (see examples in the config file)
 5. Click **Save Configuration**

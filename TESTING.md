@@ -357,7 +357,7 @@ installplg /boot/config/plugins/tmuxai.plg  # Unraid 6.x
 # OR
 plugin install /boot/config/plugins/tmuxai.plg  # Unraid 7
 
-# Reconfigure via Settings > TmuxAI or edit config:
+# Reconfigure via Settings > User Utilities > TmuxAI or edit config:
 nano /boot/config/plugins/tmuxai/config/config.yaml
 ```
 
@@ -573,7 +573,7 @@ installplg /boot/config/plugins/tmuxai.plg
 # For Unraid 7:
 plugin install /boot/config/plugins/tmuxai.plg
 
-# Configure via Settings > TmuxAI or edit directly:
+# Configure via Settings > User Utilities > TmuxAI or edit directly:
 nano /boot/config/plugins/tmuxai/config/config.yaml
 
 # Test
