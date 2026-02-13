@@ -47,11 +47,6 @@ if(isset($_POST['config_content'])) {
         $return = [];
         $return["error"]["response"] = $t->getMessage();
     }
-    catch (\Exception $e) {
-        error_log($e);
-        $return = [];
-        $return["error"]["response"] = $e->getMessage();
-    }
     echo json_encode($return);
 } else {
     $return["error"]["response"] = "No configuration data provided.";

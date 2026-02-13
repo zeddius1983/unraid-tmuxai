@@ -256,6 +256,18 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 
 <script type="text/javascript">
 $(function() {
+    // HTML escape function to prevent XSS
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+    
     $('#btnSave').click(function() {
         var configContent = $('#config_content').val();
         
@@ -267,7 +279,7 @@ $(function() {
             if(data.success && data.success.response) {
                 swal({
                     title: Title + 'Saved',
-                    text: 'The configuration was saved successfully:<br><br><span style="font-weight:bold;">' + data.success.response + '</span>',
+                    text: 'The configuration was saved successfully:<br><br><span style="font-weight:bold;">' + escapeHtml(data.success.response) + '</span>',
                     timer: 2000,
                     showConfirmButton: false,
                     html: true,
@@ -278,7 +290,7 @@ $(function() {
             } else if(data.error && data.error.response) {
                 swal({
                     title: Title + 'Error',
-                    text: 'There was an error saving the configuration:<br><br><span style="font-weight:bold;">' + data.error.response + '</span>',
+                    text: 'There was an error saving the configuration:<br><br><span style="font-weight:bold;">' + escapeHtml(data.error.response) + '</span>',
                     html: true,
                     type: 'error'
                 });
