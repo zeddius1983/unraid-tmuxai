@@ -36,7 +36,11 @@ Before submitting, test the plugin on an Unraid system:
 ```bash
 # Download and install
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
+
+# For Unraid 6.x:
 installplg tmuxai.plg
+# For Unraid 7:
+plugin install tmuxai.plg
 
 # Test functionality
 tmuxai --version

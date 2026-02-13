@@ -5,6 +5,24 @@ All notable changes to the TmuxAI Unraid plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2026.02.13] - 2026-02-13
+
+### Added
+- Created symlink from `/root/.config/tmuxai` to `/boot/config/plugins/tmuxai/config`
+- Automatic migration of existing config files to persisted storage
+- Enhanced README.txt with symlink information
+
+### Fixed
+- tmuxai configuration now persists across Unraid reboots
+- Resolved issue where `/root/.config` is not persisted by default in Unraid
+- Config files are now stored in `/boot/config/plugins/tmuxai/config`
+
+### Changed
+- Simplified config location to `/boot/config/plugins/tmuxai/config` (removed nested `.config/tmuxai`)
+- Updated plugin version to 2026.02.13
+- Updated documentation to reflect simplified config path
+- Removal script now cleans up symlink properly
+
 ## [2026.02.12] - 2026-02-12
 
 ### Changed

@@ -1,22 +1,27 @@
 <?xml version='1.0' standalone='yes'?>
-<!DOCTYPE PLUGIN [
-  <!ENTITY name      "tmuxai">
-  <!ENTITY author    "zeddius1983">
-  <!ENTITY version   "2026.02.12">
-  <!ENTITY launch    "Settings/TmuxAI">
-  <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unraid-&name;/main">
-  <!ENTITY pluginURL "&gitURL;/tmuxai.plg">
-  <!ENTITY md5       "TBD">
-]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" support="https://github.com/&author;/unraid-&name;/issues" icon="&gitURL;/&name;.png" pluginName="TmuxAI">
+<!--
+  TmuxAI Plugin for Unraid
+  Author: zeddius1983
+  Repository: https://github.com/zeddius1983/unraid-tmuxai
+-->
+
+<PLUGIN name="tmuxai" author="zeddius1983" version="2026.02.13" launch="Settings/TmuxAI" pluginURL="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg" min="6.9.0" support="https://github.com/zeddius1983/unraid-tmuxai/issues" icon="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png" pluginName="TmuxAI">
 
 <DESCRIPTION>
 TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal. Perfect for getting command help, code suggestions, and quick answers while working in Unraid.
 </DESCRIPTION>
 
 <CHANGES>
+###2026.02.13
+- Simplified config location to /boot/config/plugins/tmuxai/config (removed nested .config/tmuxai)
+- Create symlink from /root/.config/tmuxai to /boot/config/plugins/tmuxai/config
+- Ensure tmuxai configuration persists across Unraid reboots
+- Automatically migrate existing config files to persisted storage
+
 ###2026.02.12
+- Updated plugin header to remove !ENTITY declarations (use inline values)
+- Created new custom TmuxAI icon with terminal splits and AI elements
 - Updated tmuxai repository to github.com/alvinunreal/tmuxai
 - Updated tmuxai version to v2.1.0
 - Fixed installation to use correct releases page
@@ -34,15 +39,15 @@ This plugin installs tmuxai, a CLI tool that integrates AI into tmux.
 tmuxai allows you to use AI capabilities directly from your tmux sessions.
 -->
 
-<FILE Name="/boot/config/plugins/&name;/&name;.png">
-<URL>&gitURL;/&name;.png</URL>
+<FILE Name="/boot/config/plugins/tmuxai/tmuxai.png">
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
 </FILE>
 
-<FILE Name="/boot/config/plugins/&name;/setup.sh">
-<URL>&gitURL;/setup.sh</URL>
+<FILE Name="/boot/config/plugins/tmuxai/setup.sh">
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/setup.sh</URL>
 </FILE>
 
-<FILE Name="/boot/config/plugins/&name;/config.yaml">
+<FILE Name="/boot/config/plugins/tmuxai/config.yaml">
 <INLINE>
 <![CDATA[
 # TmuxAI Example Configuration
@@ -206,6 +211,34 @@ else
   echo "WARNING: tmuxai installation completed but binary not found in PATH"
 fi
 
+# Create symlink for tmuxai config to persist across reboots
+# tmuxai uses /root/.config/tmuxai by default, but this is not persisted in Unraid
+# We create a symlink to /boot/config/plugins/tmuxai/config
+TMUXAI_CONFIG_DIR="/root/.config/tmuxai"
+PERSISTED_CONFIG_DIR="${CONFIG_DIR}"
+
+# Create the persisted config directory
+mkdir -p "${PERSISTED_CONFIG_DIR}"
+
+# Remove /root/.config/tmuxai if it exists and is not a symlink
+if [ -e "${TMUXAI_CONFIG_DIR}" ] && [ ! -L "${TMUXAI_CONFIG_DIR}" ]; then
+  # If it's a directory with files, move them to the persisted location
+  if [ -d "${TMUXAI_CONFIG_DIR}" ]; then
+    echo "Moving existing tmuxai config to persisted storage..."
+    cp -r "${TMUXAI_CONFIG_DIR}"/* "${PERSISTED_CONFIG_DIR}/" 2>/dev/null || true
+  fi
+  rm -rf "${TMUXAI_CONFIG_DIR}"
+fi
+
+# Create parent directory if it doesn't exist
+mkdir -p /root/.config
+
+# Create symlink if it doesn't exist
+if [ ! -L "${TMUXAI_CONFIG_DIR}" ]; then
+  ln -s "${PERSISTED_CONFIG_DIR}" "${TMUXAI_CONFIG_DIR}"
+  echo "Created symlink: ${TMUXAI_CONFIG_DIR} -> ${PERSISTED_CONFIG_DIR}"
+fi
+
 # Create a simple configuration file
 cat > "${CONFIG_DIR}/README.txt" << 'EOF'
 TmuxAI Configuration
@@ -230,10 +263,17 @@ Setup:
    - Press prefix + C (capital C) to ask AI a question
    - Or run: tmuxai ask "your question"
 
+Configuration Files:
+- tmuxai config is stored in: /boot/config/plugins/tmuxai/config
+- A symlink is created at: /root/.config/tmuxai -> /boot/config/plugins/tmuxai/config
+- This ensures your configuration persists across Unraid reboots
+
 For more information, visit: https://github.com/alvinunreal/tmuxai
 EOF
 
 echo "TmuxAI plugin installation complete!"
+echo "Config location (persisted): ${PERSISTED_CONFIG_DIR}"
+echo "Symlink created at: ${TMUXAI_CONFIG_DIR}"
 echo "See ${CONFIG_DIR}/README.txt for configuration instructions."
 
 ]]>
@@ -250,6 +290,7 @@ Remove script
 
 PLUGIN_NAME="tmuxai"
 INSTALL_DIR="/usr/local/bin"
+TMUXAI_CONFIG_SYMLINK="/root/.config/tmuxai"
 
 # Remove tmuxai binary
 if [ -f "${INSTALL_DIR}/tmuxai" ]; then
@@ -264,6 +305,12 @@ fi
 
 if command -v pip &> /dev/null; then
   pip uninstall -y tmuxai 2>/dev/null || true
+fi
+
+# Remove symlink if it exists
+if [ -L "${TMUXAI_CONFIG_SYMLINK}" ]; then
+  rm -f "${TMUXAI_CONFIG_SYMLINK}"
+  echo "Removed config symlink: ${TMUXAI_CONFIG_SYMLINK}"
 fi
 
 # Note: We keep the config directory in /boot/config/plugins/tmuxai

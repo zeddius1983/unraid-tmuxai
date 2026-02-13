@@ -10,7 +10,10 @@ ssh root@tower
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
 
 # Install the plugin
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg
 
 # Verify installation
 tmuxai --version || echo "tmuxai is ready to configure"
@@ -108,11 +111,17 @@ rm -rf /boot/config/plugins/tmuxai/
 ```bash
 # Check for updates in Community Applications
 # Or manually reinstall:
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg --update
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg --update
 
 # Or remove and reinstall:
 removepkg tmuxai
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg
 ```
 
 ## Example 9: Troubleshooting

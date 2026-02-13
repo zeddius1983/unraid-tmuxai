@@ -6,7 +6,11 @@
 # Install via Unraid Community Applications
 # Or manually:
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg
+
+# For Unraid 6.x:
 installplg tmuxai.plg
+# For Unraid 7:
+plugin install tmuxai.plg
 ```
 
 ## Setup
@@ -43,7 +47,10 @@ Inside a tmux session:
 
 - Plugin config: `/boot/config/plugins/tmuxai/`
 - User config: `/boot/config/plugins/tmuxai/config/.tmuxairc`
+- tmuxai config: `/root/.config/tmuxai/` (symlink to `/boot/config/plugins/tmuxai/config`)
 - Binary location: `/usr/local/bin/tmuxai`
+
+**Note:** The plugin creates a symlink from `/root/.config/tmuxai` to `/boot/config/plugins/tmuxai/config` to ensure your tmuxai configuration persists across Unraid reboots.
 
 ## Environment Variables
 

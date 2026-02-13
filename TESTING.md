@@ -57,7 +57,11 @@ wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/YOUR_BRANCH/tmu
 
 ```bash
 # Install the plugin
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg
+
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg
 
 # Watch the installation output for any errors
 ```
@@ -116,8 +120,11 @@ On your Unraid server:
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/YOUR_BRANCH/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
 
-# Install
+# Install (For Unraid 6.x)
 installplg /boot/config/plugins/tmuxai.plg
+
+# Install (For Unraid 7)
+plugin install /boot/config/plugins/tmuxai.plg
 ```
 
 ### Step 3: Alternative - Use Local HTTP Server
@@ -137,8 +144,11 @@ python3 -m http.server 8000
 wget http://YOUR_DEV_MACHINE_IP:8000/tmuxai.plg \
   -O /boot/config/plugins/tmuxai.plg
 
-# Install
+# Install (For Unraid 6.x)
 installplg /boot/config/plugins/tmuxai.plg
+
+# Install (For Unraid 7)
+plugin install /boot/config/plugins/tmuxai.plg
 ```
 
 ## Configuration and Testing
@@ -233,6 +243,13 @@ tmuxai ask "Test Anthropic"
 ls -la /boot/config/plugins/tmuxai/
 ls -la /boot/config/plugins/tmuxai/config/
 
+# Verify the symlink was created
+ls -la /root/.config/tmuxai
+# Should show: tmuxai -> /boot/config/plugins/tmuxai/config
+
+# Check persisted config directory
+ls -la /boot/config/plugins/tmuxai/config/
+
 # View the README
 cat /boot/config/plugins/tmuxai/config/README.txt
 ```
@@ -245,7 +262,18 @@ reboot
 
 # After reboot, SSH back in and test
 ssh root@YOUR_UNRAID_IP
+
+# Verify symlink still exists (it should be recreated on boot)
+ls -la /root/.config/tmuxai
+# Should show: tmuxai -> /boot/config/plugins/tmuxai/config
+
+# Test that your config persisted
 tmuxai ask "Test after reboot"
+
+# If you created any config files, verify they still exist
+ls -la /root/.config/tmuxai/
+# or
+ls -la /boot/config/plugins/tmuxai/config/
 ```
 
 ## Troubleshooting
@@ -267,7 +295,9 @@ which tmuxai
 
 # Try reinstalling
 removepkg tmuxai
-installplg /boot/config/plugins/tmuxai.plg
+installplg /boot/config/plugins/tmuxai.plg  # Unraid 6.x
+# OR
+plugin install /boot/config/plugins/tmuxai.plg  # Unraid 7
 
 # Check installation logs
 cat /var/log/syslog | grep tmuxai
@@ -326,7 +356,9 @@ removepkg tmuxai
 rm -rf /boot/config/plugins/tmuxai
 
 # Clean install
-installplg /boot/config/plugins/tmuxai.plg
+installplg /boot/config/plugins/tmuxai.plg  # Unraid 6.x
+# OR
+plugin install /boot/config/plugins/tmuxai.plg  # Unraid 7
 
 # Run setup again
 bash /boot/config/plugins/tmuxai/setup.sh
@@ -538,7 +570,11 @@ Once testing is successful:
 ```bash
 # Install
 wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
+
+# For Unraid 6.x:
 installplg /boot/config/plugins/tmuxai.plg
+# For Unraid 7:
+plugin install /boot/config/plugins/tmuxai.plg
 
 # Configure
 bash /boot/config/plugins/tmuxai/setup.sh

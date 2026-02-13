@@ -64,8 +64,11 @@ https://github.com/zeddius1983/unraid-tmuxai
    # Download plugin
    wget https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg -O /boot/config/plugins/tmuxai.plg
    
-   # Install
+   # Install (For Unraid 6.x)
    installplg /boot/config/plugins/tmuxai.plg
+   
+   # Install (For Unraid 7)
+   plugin install /boot/config/plugins/tmuxai.plg
    ```
 
 3. **Test functionality:**
@@ -92,7 +95,11 @@ https://github.com/zeddius1983/unraid-tmuxai
 
 5. **Test reinstallation:**
    ```bash
+   # For Unraid 6.x:
    installplg /boot/config/plugins/tmuxai.plg
+   
+   # For Unraid 7:
+   plugin install /boot/config/plugins/tmuxai.plg
    ```
 
 ## Community Applications Submission
