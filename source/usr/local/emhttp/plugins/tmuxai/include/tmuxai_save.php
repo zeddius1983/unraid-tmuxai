@@ -43,9 +43,9 @@ if(isset($_POST['config_content'])) {
         }
     }
     catch (\Throwable $t) {
-        error_log($t);
+        error_log("TmuxAI save error: " . $t->getMessage());
         $return = [];
-        $return["error"]["response"] = $t->getMessage();
+        $return["error"]["response"] = "An error occurred while saving the configuration.";
     }
     echo json_encode($return);
 } else {

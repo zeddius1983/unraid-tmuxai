@@ -256,49 +256,32 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 
 <script type="text/javascript">
 $(function() {
-    // HTML escape function to prevent XSS
-    function escapeHtml(text) {
-        var map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
-    
     $('#btnSave').click(function() {
         var configContent = $('#config_content').val();
         
         $.post('/plugins/tmuxai/include/tmuxai_save.php', {
             config_content: configContent
         }, function(data) {
-            var Title = 'Configuration ';
-
             if(data.success && data.success.response) {
                 swal({
-                    title: Title + 'Saved',
-                    text: 'The configuration was saved successfully:<br><br><span style="font-weight:bold;">' + escapeHtml(data.success.response) + '</span>',
+                    title: 'Configuration Saved',
+                    text: 'The configuration was saved successfully to:\n' + data.success.response,
                     timer: 2000,
                     showConfirmButton: false,
-                    html: true,
                     type: 'success'
                 }, function() {
                     // Configuration saved, stay on the page
                 });
             } else if(data.error && data.error.response) {
                 swal({
-                    title: Title + 'Error',
-                    text: 'There was an error saving the configuration:<br><br><span style="font-weight:bold;">' + escapeHtml(data.error.response) + '</span>',
-                    html: true,
+                    title: 'Configuration Error',
+                    text: 'There was an error saving the configuration:\n' + data.error.response,
                     type: 'error'
                 });
             } else {
                 swal({
-                    title: Title + 'Error',
+                    title: 'Configuration Error',
                     text: 'There was an unknown error saving the configuration.',
-                    html: true,
                     type: 'error'
                 });
             }
@@ -306,7 +289,6 @@ $(function() {
             swal({
                 title: 'Configuration Error',
                 text: 'Failed to communicate with the server. Please try again.',
-                html: true,
                 type: 'error'
             });
         });
