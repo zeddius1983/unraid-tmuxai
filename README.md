@@ -128,7 +128,11 @@ tmuxai ask "How do I add a new cache pool in Unraid?"
 
 ### Advanced Configuration
 
-You can configure tmuxai by creating a config file at `/boot/config/plugins/tmuxai/config/.tmuxai.yaml`:
+tmuxai configuration is automatically persisted across Unraid reboots:
+- Config location: `/boot/config/plugins/tmuxai/config/.config/tmuxai/`
+- Symlink created at: `/root/.config/tmuxai` → `/boot/config/plugins/tmuxai/config/.config/tmuxai`
+
+You can configure tmuxai by creating a config file at `/root/.config/tmuxai/config.yaml` (or `/boot/config/plugins/tmuxai/config/.config/tmuxai/config.yaml`):
 
 ```yaml
 # Example configuration
@@ -136,6 +140,8 @@ provider: openai
 model: gpt-4
 temperature: 0.7
 ```
+
+**Note:** The plugin automatically creates a symlink to ensure your tmuxai configuration persists across reboots, as `/root/.config` is not persisted by default in Unraid.
 
 ## Supported AI Providers
 
