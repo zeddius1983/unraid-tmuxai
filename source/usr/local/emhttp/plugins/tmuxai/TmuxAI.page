@@ -266,6 +266,7 @@ $(function() {
                 swal({
                     title: 'Configuration Saved',
                     text: data.success.response,
+                    html: false,
                     timer: 2000,
                     showConfirmButton: false,
                     type: 'success'
@@ -276,12 +277,14 @@ $(function() {
                 swal({
                     title: 'Configuration Error',
                     text: data.error.response,
+                    html: false,
                     type: 'error'
                 });
             } else {
                 swal({
                     title: 'Configuration Error',
                     text: 'There was an unknown error saving the configuration.',
+                    html: false,
                     type: 'error'
                 });
             }
@@ -289,6 +292,7 @@ $(function() {
             swal({
                 title: 'Configuration Error',
                 text: 'Failed to communicate with the server. Please try again.',
+                html: false,
                 type: 'error'
             });
         });
