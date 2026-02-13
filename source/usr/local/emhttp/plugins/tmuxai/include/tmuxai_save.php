@@ -29,7 +29,6 @@ if(isset($_POST['config_content'])) {
         
         // Verify the resolved path is within our allowed directory
         if(!str_starts_with($real_config_file, $allowed_dir)) {
-            $return = [];
             $return["error"]["response"] = "File location is not allowed.";
             die(json_encode($return));
         }
@@ -46,7 +45,6 @@ if(isset($_POST['config_content'])) {
     }
     catch (\Throwable $t) {
         error_log("TmuxAI save error: " . $t->getMessage());
-        $return = [];
         $return["error"]["response"] = "An error occurred while saving the configuration.";
     }
     echo json_encode($return);
