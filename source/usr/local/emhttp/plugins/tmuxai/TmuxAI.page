@@ -268,7 +268,7 @@ $(function() {
                     text: data.success.response,
                     html: false,
                     timer: 2000,
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     type: 'success'
                 }, function() {
                     // Configuration saved, stay on the page
