@@ -153,47 +153,44 @@ plugin install /boot/config/plugins/tmuxai.plg
 
 ## Configuration and Testing
 
-### Option A: Use the Setup Wizard (Recommended)
+### Configure TmuxAI
+
+You can configure tmuxai in two ways:
+
+**Option A: Via Unraid WebGUI (Recommended)**
+
+1. Open your browser and go to your Unraid server
+2. Navigate to **Settings** > **TmuxAI**
+3. Edit the `config.yaml` file in the configuration editor
+4. Add your AI provider configuration (see examples in the config file)
+5. Click **Save Configuration**
+
+**Option B: Edit Configuration File Directly**
 
 ```bash
-# Run the interactive setup script
-bash /boot/config/plugins/tmuxai/setup.sh
+# Edit the config file
+nano /boot/config/plugins/tmuxai/config/config.yaml
 ```
 
-Follow the prompts to:
-1. Select your AI provider (OpenAI, Anthropic, Google, or Custom)
-2. Enter your API key
-3. Choose whether to persist configuration
+Add your AI provider configuration:
 
-### Option B: Manual Configuration
-
-```bash
-# Set your API key for the current session
-export OPENAI_API_KEY="sk-your-actual-api-key-here"
-
-# Or for Anthropic:
-export ANTHROPIC_API_KEY="sk-ant-your-actual-api-key-here"
-
-# Or for Google:
-export GOOGLE_API_KEY="your-google-api-key-here"
+```yaml
+models:
+  gpt-4:
+    provider: "openai"
+    model: "gpt-4"
+    api_key: "sk-your-api-key-here"
+  
+  # Or use Claude
+  claude:
+    provider: "anthropic"
+    model: "claude-3-opus-20240229"
+    api_key: "sk-ant-your-api-key-here"
 ```
 
-### Option C: Persistent Configuration
+Save the file (Ctrl+O, Enter) and exit (Ctrl+X).
 
-To make the API key persist across reboots:
-
-```bash
-# Edit the Unraid go file
-nano /boot/config/go
-
-# Add this line at the end (replace with your actual key):
-export OPENAI_API_KEY="sk-your-actual-api-key-here"
-
-# Save (Ctrl+O, Enter) and exit (Ctrl+X)
-
-# Load the configuration now
-source /boot/config/go
-```
+**Note:** Configuration is automatically persisted across reboots as it's stored in `/boot/config/plugins/tmuxai/config/`.
 
 ## Verification Steps
 
@@ -360,8 +357,8 @@ installplg /boot/config/plugins/tmuxai.plg  # Unraid 6.x
 # OR
 plugin install /boot/config/plugins/tmuxai.plg  # Unraid 7
 
-# Run setup again
-bash /boot/config/plugins/tmuxai/setup.sh
+# Reconfigure via Settings > TmuxAI or edit config:
+nano /boot/config/plugins/tmuxai/config/config.yaml
 ```
 
 ### Issue 5: Different Architecture
@@ -576,8 +573,8 @@ installplg /boot/config/plugins/tmuxai.plg
 # For Unraid 7:
 plugin install /boot/config/plugins/tmuxai.plg
 
-# Configure
-bash /boot/config/plugins/tmuxai/setup.sh
+# Configure via Settings > TmuxAI or edit directly:
+nano /boot/config/plugins/tmuxai/config/config.yaml
 
 # Test
 tmuxai ask "Test question"

@@ -22,12 +22,17 @@ tmuxai --version || echo "tmuxai is ready to configure"
 ## Example 2: Configure with OpenAI
 
 ```bash
-# Run the setup helper
-bash /boot/config/plugins/tmuxai/setup.sh
+# Edit configuration via WebGUI
+# Go to Settings > TmuxAI in Unraid WebGUI
+# Or edit directly:
+nano /boot/config/plugins/tmuxai/config/config.yaml
 
-# Or manually configure
-echo 'export OPENAI_API_KEY="sk-your-api-key-here"' >> /boot/config/go
-source /boot/config/go
+# Add your configuration:
+# models:
+#   gpt-4:
+#     provider: "openai"
+#     model: "gpt-4"
+#     api_key: "sk-your-api-key-here"
 
 # Test it
 tmuxai ask "How do I list Docker containers?"
@@ -47,11 +52,15 @@ tmuxai ask "How do I check disk space on Unraid?"
 ## Example 4: Configure with Claude (Anthropic)
 
 ```bash
-# Set API key
-export ANTHROPIC_API_KEY="sk-ant-your-api-key-here"
+# Edit config file
+nano /boot/config/plugins/tmuxai/config/config.yaml
 
-# Add to go file for persistence
-echo 'export ANTHROPIC_API_KEY="sk-ant-your-api-key-here"' >> /boot/config/go
+# Add your configuration:
+# models:
+#   claude:
+#     provider: "anthropic"
+#     model: "claude-3-opus-20240229"
+#     api_key: "sk-ant-your-api-key-here"
 
 # Test
 tmuxai ask "Explain Docker networks"
@@ -60,15 +69,17 @@ tmuxai ask "Explain Docker networks"
 ## Example 5: Use with Custom API
 
 ```bash
-# For OpenAI-compatible APIs (like LocalAI, Ollama with OpenAI API)
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_API_BASE="http://localhost:8080/v1"
+# Edit config file
+nano /boot/config/plugins/tmuxai/config/config.yaml
 
-# Add to go file
-cat >> /boot/config/go << 'EOF'
-export OPENAI_API_KEY="your-api-key"
-export OPENAI_API_BASE="http://localhost:8080/v1"
-EOF
+# For OpenAI-compatible APIs (like LocalAI, Ollama with OpenAI API)
+# Add your configuration:
+# models:
+#   local-model:
+#     provider: "openai"
+#     model: "gpt-3.5-turbo"
+#     api_key: "your-api-key"
+#     base_url: "http://localhost:8080/v1"
 
 # Test
 tmuxai ask "Test question"
@@ -131,11 +142,8 @@ plugin install /boot/config/plugins/tmuxai.plg
 which tmuxai
 ls -l /usr/local/bin/tmuxai
 
-# Check API key
-echo $OPENAI_API_KEY
-
 # Check configuration
-cat /boot/config/plugins/tmuxai/config/README.txt
+cat /boot/config/plugins/tmuxai/config/config.yaml
 
 # View plugin files
 ls -la /boot/config/plugins/tmuxai/
@@ -144,16 +152,14 @@ ls -la /boot/config/plugins/tmuxai/
 echo $TMUX
 ```
 
-## Example 10: Integration with .bashrc
+## Example 10: Quick Configuration Alias
 
 ```bash
-# Add to ~/.bashrc for easy access
+# Add to ~/.bashrc for easy config access
 cat >> ~/.bashrc << 'EOF'
 
-# TmuxAI configuration
-if [ -f /boot/config/plugins/tmuxai/config/.tmuxairc ]; then
-    source /boot/config/plugins/tmuxai/config/.tmuxairc
-fi
+# TmuxAI quick edit alias
+alias tmuxai-config='nano /boot/config/plugins/tmuxai/config/config.yaml'
 
 # Alias for quick AI questions
 alias ai='tmuxai ask'
@@ -163,5 +169,6 @@ EOF
 source ~/.bashrc
 
 # Now you can use:
-ai "How do I restart Docker?"
+tmuxai-config  # Edit configuration
+ai "How do I restart Docker?"  # Quick AI question
 ```

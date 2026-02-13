@@ -59,7 +59,7 @@ tmuxai allows you to use AI capabilities directly from your tmux sessions.
 </FILE>
 
 <FILE Name="/usr/local/emhttp/plugins/tmuxai/tmuxai.png">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/source/usr/local/emhttp/plugins/tmuxai/tmuxai.png</URL>
+<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
 </FILE>
 
 <FILE Name="/boot/config/plugins/tmuxai/config/config.yaml">
