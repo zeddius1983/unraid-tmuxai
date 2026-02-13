@@ -18,7 +18,7 @@ plugin install tmuxai.plg
 Configure your API key:
 
 **Option 1: Via Unraid WebGUI**
-1. Go to Settings > TmuxAI
+1. Go to Settings > User Utilities > TmuxAI
 2. Edit the config.yaml in the configuration editor
 3. Save your changes
 
@@ -80,7 +80,7 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 export GOOGLE_API_KEY="..."
 ```
 
-**Note:** Using config.yaml (via Settings > TmuxAI) is the recommended method.
+**Note:** Using config.yaml (via Settings > User Utilities > TmuxAI) is the recommended method.
 
 ## Examples
 

@@ -1,4 +1,4 @@
-Menu="Settings"
+Menu="UserUtilities"
 Title="TmuxAI"
 Icon="tmuxai.png"
 ---
@@ -22,31 +22,13 @@ if ($_POST['action'] == 'save') {
     } else {
         $config_content = $_POST['config_content'] ?? '';
         
-        // Validate YAML syntax before saving
-        $validation_error = null;
-        if (!empty($config_content)) {
-            // Create a temporary file for validation
-            $temp_file = tempnam(sys_get_temp_dir(), 'tmuxai_yaml_');
-            file_put_contents($temp_file, $config_content);
-            
-            // Try to validate YAML syntax using Python
-            exec("python3 -c \"import yaml; yaml.safe_load(open('$temp_file'))\" 2>&1", $output, $return_code);
-            unlink($temp_file);
-            
-            if ($return_code !== 0) {
-                $validation_error = "YAML syntax error. Please check your configuration.";
-            }
-        }
-        
-        if ($validation_error) {
-            $error = $validation_error;
-        } else {
-            file_put_contents($config_file, $config_content);
-            $saved = true;
-            // Redirect to prevent form resubmission and show success message
-            header('Location: ' . $_SERVER['REQUEST_URI'] . '?saved=1');
-            exit;
-        }
+        // Save configuration without validation
+        // Note: YAML validation removed because python3 is not available by default in Unraid
+        file_put_contents($config_file, $config_content);
+        $saved = true;
+        // Redirect to prevent form resubmission and show success message
+        header('Location: ' . $_SERVER['REQUEST_URI'] . '?saved=1');
+        exit;
     }
 }
 

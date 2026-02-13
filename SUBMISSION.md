@@ -67,7 +67,7 @@ plugin install tmuxai.plg
 - [x] EXAMPLES.md - Usage examples
 - [x] CONTRIBUTING.md - Contribution guide
 - [x] COMMUNITY_APPS.md - Submission guide
-- [x] Settings page - Configuration via WebGUI (Settings > TmuxAI)
+- [x] Settings page - Configuration via WebGUI (Settings > User Utilities > TmuxAI)
 - [x] test-plugin.sh - Validation script
 - [x] tmuxai-template.xml - Community Apps template
 - [x] tmuxai.cfg - Configuration file

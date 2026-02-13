@@ -11,7 +11,7 @@ TmuxAI brings powerful AI assistance directly into your tmux terminal sessions o
 
 **Quick Setup:**
 1. Install the plugin
-2. Go to Settings > TmuxAI to configure your API keys
+2. Go to Settings > User Utilities > TmuxAI to configure your API keys
 3. Start tmux and use AI assistance with `prefix + C`
 
 **Supported AI Providers:**

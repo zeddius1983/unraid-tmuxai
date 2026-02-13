@@ -76,7 +76,7 @@ https://github.com/zeddius1983/unraid-tmuxai
    # Check installation
    which tmuxai
    
-   # Configure via Settings > TmuxAI or edit directly:
+   # Configure via Settings > User Utilities > TmuxAI or edit directly:
    nano /boot/config/plugins/tmuxai/config/config.yaml
    
    # Test
