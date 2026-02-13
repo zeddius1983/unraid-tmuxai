@@ -14,7 +14,8 @@ TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. 
 
 <CHANGES>
 ###2026.02.13
-- Create symlink from /root/.config/tmuxai to /boot/config/plugins/tmuxai/config/.config/tmuxai
+- Simplified config location to /boot/config/plugins/tmuxai/config (removed nested .config/tmuxai)
+- Create symlink from /root/.config/tmuxai to /boot/config/plugins/tmuxai/config
 - Ensure tmuxai configuration persists across Unraid reboots
 - Automatically migrate existing config files to persisted storage
 
@@ -212,9 +213,9 @@ fi
 
 # Create symlink for tmuxai config to persist across reboots
 # tmuxai uses /root/.config/tmuxai by default, but this is not persisted in Unraid
-# We create a symlink to /boot/config/plugins/tmuxai/config/.config/tmuxai
+# We create a symlink to /boot/config/plugins/tmuxai/config
 TMUXAI_CONFIG_DIR="/root/.config/tmuxai"
-PERSISTED_CONFIG_DIR="${CONFIG_DIR}/.config/tmuxai"
+PERSISTED_CONFIG_DIR="${CONFIG_DIR}"
 
 # Create the persisted config directory
 mkdir -p "${PERSISTED_CONFIG_DIR}"
@@ -263,8 +264,8 @@ Setup:
    - Or run: tmuxai ask "your question"
 
 Configuration Files:
-- tmuxai config is stored in: /boot/config/plugins/tmuxai/config/.config/tmuxai
-- A symlink is created at: /root/.config/tmuxai -> /boot/config/plugins/tmuxai/config/.config/tmuxai
+- tmuxai config is stored in: /boot/config/plugins/tmuxai/config
+- A symlink is created at: /root/.config/tmuxai -> /boot/config/plugins/tmuxai/config
 - This ensures your configuration persists across Unraid reboots
 
 For more information, visit: https://github.com/alvinunreal/tmuxai

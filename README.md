@@ -129,10 +129,10 @@ tmuxai ask "How do I add a new cache pool in Unraid?"
 ### Advanced Configuration
 
 tmuxai configuration is automatically persisted across Unraid reboots:
-- Config location: `/boot/config/plugins/tmuxai/config/.config/tmuxai/`
-- Symlink created at: `/root/.config/tmuxai` → `/boot/config/plugins/tmuxai/config/.config/tmuxai`
+- Config location: `/boot/config/plugins/tmuxai/config/`
+- Symlink created at: `/root/.config/tmuxai` → `/boot/config/plugins/tmuxai/config`
 
-You can configure tmuxai by creating a config file at `/root/.config/tmuxai/config.yaml` (or `/boot/config/plugins/tmuxai/config/.config/tmuxai/config.yaml`):
+You can configure tmuxai by creating a config file at `/root/.config/tmuxai/config.yaml` (or `/boot/config/plugins/tmuxai/config/config.yaml`):
 
 ```yaml
 # Example configuration
