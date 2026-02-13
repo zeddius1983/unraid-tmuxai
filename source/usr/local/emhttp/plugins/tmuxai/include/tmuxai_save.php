@@ -11,16 +11,24 @@
  */
 $return = [];
 
-function startsWith($string, $startString) {
-    return substr($string, 0, strlen($startString)) === $startString;
-}
-
 if(isset($_POST['config_content'])) {
     try {
         $config_file = '/boot/config/plugins/tmuxai/config/config.yaml';
         
         // Security check - ensure we're only writing to our plugin directory
-        if(!startsWith($config_file, "/boot/config/plugins/tmuxai/")) {
+        // Use realpath to prevent path traversal attacks
+        $allowed_dir = '/boot/config/plugins/tmuxai/';
+        $real_config_dir = dirname($config_file);
+        
+        // Ensure directory exists for realpath to work
+        if (!is_dir($real_config_dir)) {
+            mkdir($real_config_dir, 0755, true);
+        }
+        
+        $real_config_file = realpath($real_config_dir) . '/' . basename($config_file);
+        
+        // Verify the resolved path is within our allowed directory
+        if(!str_starts_with($real_config_file, $allowed_dir)) {
             $return = [];
             $return["error"]["response"] = "File location is not allowed.";
             die(json_encode($return));
@@ -29,15 +37,9 @@ if(isset($_POST['config_content'])) {
         // Get config content from POST
         $config_content = str_replace("\r", '', $_POST['config_content']);
         
-        // Ensure directory exists
-        $config_dir = dirname($config_file);
-        if (!is_dir($config_dir)) {
-            mkdir($config_dir, 0755, true);
-        }
-        
         // Save the configuration
-        if(file_put_contents($config_file, $config_content) !== false) {
-            $return["success"]["response"] = $config_file;
+        if(file_put_contents($real_config_file, $config_content) !== false) {
+            $return["success"]["response"] = "Configuration saved successfully.";
         } else {
             $return["error"]["response"] = "Failed to save configuration file.";
         }
