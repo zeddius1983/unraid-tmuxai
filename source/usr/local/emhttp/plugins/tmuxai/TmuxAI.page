@@ -43,8 +43,16 @@ if ($_POST['action'] == 'save') {
         } else {
             file_put_contents($config_file, $config_content);
             $saved = true;
+            // Redirect to prevent form resubmission and show success message
+            header('Location: ' . $_SERVER['REQUEST_URI'] . '?saved=1');
+            exit;
         }
     }
+}
+
+// Check for saved parameter from redirect
+if (isset($_GET['saved']) && $_GET['saved'] == '1') {
+    $saved = true;
 }
 
 // Read current config
@@ -98,11 +106,13 @@ if (file_exists('/usr/local/bin/tmuxai')) {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
+    background: #1c1c1c;
+    color: #e0e0e0;
 }
 
 .tmuxai-section {
-    background: #f6f6f6;
-    border: 1px solid #ccc;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
     border-radius: 5px;
     padding: 20px;
     margin-bottom: 20px;
@@ -110,11 +120,37 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 
 .tmuxai-section h2 {
     margin-top: 0;
-    color: #333;
+    color: #e0e0e0;
     font-size: 18px;
     border-bottom: 2px solid #ff8c00;
     padding-bottom: 10px;
     margin-bottom: 15px;
+}
+
+.tmuxai-section h3 {
+    color: #d0d0d0;
+}
+
+.tmuxai-section p,
+.tmuxai-section ol,
+.tmuxai-section ul,
+.tmuxai-section li {
+    color: #c0c0c0;
+}
+
+.tmuxai-section a {
+    color: #4a9eff;
+}
+
+.tmuxai-section a:hover {
+    color: #6ab0ff;
+}
+
+.tmuxai-section code {
+    background: #1a1a1a;
+    color: #ff8c00;
+    padding: 2px 6px;
+    border-radius: 3px;
 }
 
 .config-editor {
@@ -123,9 +159,10 @@ if (file_exists('/usr/local/bin/tmuxai')) {
     font-family: 'Courier New', monospace;
     font-size: 13px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #3a3a3a;
     border-radius: 3px;
-    background: #fff;
+    background: #1a1a1a;
+    color: #e0e0e0;
 }
 
 .button-group {
@@ -160,25 +197,26 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 }
 
 .info-box {
-    background: #e7f3ff;
-    border-left: 4px solid #2196F3;
+    background: #2a3a4a;
+    border-left: 4px solid #4a9eff;
     padding: 12px;
     margin: 15px 0;
+    color: #d0d0d0;
 }
 
 .success-message {
-    background: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+    background: #1a4d2e;
+    border: 1px solid #2d6a4f;
+    color: #90ee90;
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
 }
 
 .error-message {
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
+    background: #4d1a1a;
+    border: 1px solid #6a2d2d;
+    color: #ff6b6b;
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
@@ -186,7 +224,8 @@ if (file_exists('/usr/local/bin/tmuxai')) {
 
 .version-info {
     font-family: monospace;
-    background: #f8f9fa;
+    background: #1a1a1a;
+    color: #c0c0c0;
     padding: 10px;
     border-radius: 3px;
     margin: 10px 0;

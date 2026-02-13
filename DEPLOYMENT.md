@@ -76,11 +76,10 @@ https://github.com/zeddius1983/unraid-tmuxai
    # Check installation
    which tmuxai
    
-   # Run setup
-   bash /boot/config/plugins/tmuxai/setup.sh
+   # Configure via Settings > TmuxAI or edit directly:
+   nano /boot/config/plugins/tmuxai/config/config.yaml
    
-   # Test with API key
-   export OPENAI_API_KEY="your-test-key"
+   # Test
    tmuxai ask "test question"
    ```
 

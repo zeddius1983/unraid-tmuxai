@@ -15,14 +15,25 @@ plugin install tmuxai.plg
 
 ## Setup
 
-Run the setup helper:
+Configure your API key:
+
+**Option 1: Via Unraid WebGUI**
+1. Go to Settings > TmuxAI
+2. Edit the config.yaml in the configuration editor
+3. Save your changes
+
+**Option 2: Edit config file directly**
 ```bash
-bash /boot/config/plugins/tmuxai/setup.sh
+nano /boot/config/plugins/tmuxai/config/config.yaml
 ```
 
-Or manually set your API key:
-```bash
-export OPENAI_API_KEY="sk-..."
+Add your model configuration:
+```yaml
+models:
+  gpt-4:
+    provider: "openai"
+    model: "gpt-4"
+    api_key: "sk-..."
 ```
 
 ## Common Commands
@@ -46,7 +57,7 @@ Inside a tmux session:
 ## Configuration Files
 
 - Plugin config: `/boot/config/plugins/tmuxai/`
-- User config: `/boot/config/plugins/tmuxai/config/.tmuxairc`
+- Config file: `/boot/config/plugins/tmuxai/config/config.yaml`
 - tmuxai config: `/root/.config/tmuxai/` (symlink to `/boot/config/plugins/tmuxai/config`)
 - Binary location: `/usr/local/bin/tmuxai`
 
@@ -54,16 +65,22 @@ Inside a tmux session:
 
 ## Environment Variables
 
+You can also configure tmuxai using environment variables (optional):
+
 ```bash
+# Add to /boot/config/go for persistence across reboots
+
 # OpenAI
 export OPENAI_API_KEY="sk-..."
 
 # Anthropic (Claude)
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# Google (Gemini)
+# Google (Gemini)  
 export GOOGLE_API_KEY="..."
 ```
+
+**Note:** Using config.yaml (via Settings > TmuxAI) is the recommended method.
 
 ## Examples
 
@@ -87,14 +104,14 @@ tmuxai ask "Why is my array not mounting?"
 # Check if tmuxai is installed
 which tmuxai
 
-# Verify API key is set
-echo $OPENAI_API_KEY
+# Check configuration file
+cat /boot/config/plugins/tmuxai/config/config.yaml
 
-# Check logs
-ls /var/log/tmuxai/
+# View plugin files
+ls -la /boot/config/plugins/tmuxai/
 
-# Re-run setup
-bash /boot/config/plugins/tmuxai/setup.sh
+# Check if running in tmux
+echo $TMUX
 ```
 
 ## Uninstall

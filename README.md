@@ -31,8 +31,10 @@ installplg /boot/config/plugins/tmuxai.plg
 # For Unraid 7:
 plugin install /boot/config/plugins/tmuxai.plg
 
-# Configure with setup wizard
-bash /boot/config/plugins/tmuxai/setup.sh
+# Configure your API key
+# Option 1: Via Settings tab in Unraid WebGUI (Settings > TmuxAI)
+# Option 2: Edit config file directly
+nano /boot/config/plugins/tmuxai/config/config.yaml
 
 # Test it!
 tmuxai ask "What is Unraid?"
@@ -69,27 +71,31 @@ tmuxai ask "What is Unraid?"
 
 After installation, you need to configure your AI provider credentials:
 
-1. **Set up your API key** by adding it to your environment. You can do this in several ways:
+### Option 1: Via Unraid WebGUI (Recommended)
 
-   **Option A: Add to Unraid Go file** (Persistent across reboots)
+1. Open Unraid WebGUI
+2. Go to **Settings** > **TmuxAI**
+3. Edit the `config.yaml` file in the configuration editor
+4. Add your AI provider configuration (see examples in the config file)
+5. Click **Save Configuration**
+
+### Option 2: Edit Configuration File Directly
+
+1. **Edit the config file:**
    ```bash
-   # Edit your go file
-   nano /boot/config/go
-   
-   # Add your API key (choose the provider you're using)
-   export OPENAI_API_KEY="your-openai-api-key-here"
-   # OR
-   export ANTHROPIC_API_KEY="your-anthropic-api-key-here"
-   # OR
-   export GOOGLE_API_KEY="your-google-api-key-here"
+   nano /boot/config/plugins/tmuxai/config/config.yaml
    ```
 
-   **Option B: Set in current session** (Temporary)
-   ```bash
-   export OPENAI_API_KEY="your-api-key-here"
+2. **Add your AI provider configuration:**
+   ```yaml
+   models:
+     gpt-4:
+       provider: "openai"
+       model: "gpt-4"
+       api_key: "YOUR_API_KEY_HERE"
    ```
 
-2. **Verify installation:**
+3. **Verify installation:**
    ```bash
    tmuxai --version
    ```
@@ -129,16 +135,24 @@ tmuxai ask "How do I add a new cache pool in Unraid?"
 ### Advanced Configuration
 
 tmuxai configuration is automatically persisted across Unraid reboots:
-- Config location: `/boot/config/plugins/tmuxai/config/`
+- Config file location: `/boot/config/plugins/tmuxai/config/config.yaml`
 - Symlink created at: `/root/.config/tmuxai` → `/boot/config/plugins/tmuxai/config`
 
-You can configure tmuxai by creating a config file at `/root/.config/tmuxai/config.yaml` (or `/boot/config/plugins/tmuxai/config/config.yaml`):
+Edit the config file to customize tmuxai behavior:
 
 ```yaml
 # Example configuration
-provider: openai
-model: gpt-4
-temperature: 0.7
+models:
+  gpt-4:
+    provider: "openai"
+    model: "gpt-4"
+    api_key: "sk-..."
+    temperature: 0.7
+  
+  claude:
+    provider: "anthropic"
+    model: "claude-3-opus-20240229"
+    api_key: "sk-ant-..."
 ```
 
 **Note:** The plugin automatically creates a symlink to ensure your tmuxai configuration persists across reboots, as `/root/.config` is not persisted by default in Unraid.
