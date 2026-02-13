@@ -15,9 +15,36 @@ if (!is_dir($config_dir)) {
 
 // Handle form submission
 if ($_POST['action'] == 'save') {
-    $config_content = $_POST['config_content'] ?? '';
-    file_put_contents($config_file, $config_content);
-    $saved = true;
+    // CSRF protection - Unraid webGui includes this automatically via session
+    // Validate that the request is from the webGui
+    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === false) {
+        $error = "Invalid request origin";
+    } else {
+        $config_content = $_POST['config_content'] ?? '';
+        
+        // Validate YAML syntax before saving
+        $validation_error = null;
+        if (!empty($config_content)) {
+            // Create a temporary file for validation
+            $temp_file = tempnam(sys_get_temp_dir(), 'tmuxai_yaml_');
+            file_put_contents($temp_file, $config_content);
+            
+            // Try to validate YAML syntax using Python
+            exec("python3 -c \"import yaml; yaml.safe_load(open('$temp_file'))\" 2>&1", $output, $return_code);
+            unlink($temp_file);
+            
+            if ($return_code !== 0) {
+                $validation_error = "YAML syntax error. Please check your configuration.";
+            }
+        }
+        
+        if ($validation_error) {
+            $error = $validation_error;
+        } else {
+            file_put_contents($config_file, $config_content);
+            $saved = true;
+        }
+    }
 }
 
 // Read current config
@@ -148,6 +175,15 @@ if (file_exists('/usr/local/bin/tmuxai')) {
     margin-bottom: 15px;
 }
 
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
 .version-info {
     font-family: monospace;
     background: #f8f9fa;
@@ -161,6 +197,12 @@ if (file_exists('/usr/local/bin/tmuxai')) {
     <?php if (isset($saved) && $saved): ?>
     <div class="success-message">
         ✓ Configuration saved successfully!
+    </div>
+    <?php endif; ?>
+    
+    <?php if (isset($error) && $error): ?>
+    <div class="error-message">
+        ✗ Error: <?= htmlspecialchars($error) ?>
     </div>
     <?php endif; ?>
 
