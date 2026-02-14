@@ -6,13 +6,16 @@
   Repository: https://github.com/zeddius1983/unraid-tmuxai
 -->
 
-<PLUGIN name="tmuxai" author="zeddius1983" version="2026.02.13d" launch="Settings/TmuxAI" pluginURL="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg" min="6.9.0" support="https://github.com/zeddius1983/unraid-tmuxai/issues" icon="fa-terminal" pluginName="TmuxAI">
+<PLUGIN name="tmuxai" author="zeddius1983" version="2026.02.13d" launch="Settings/TmuxAI" pluginURL="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg" min="6.9.0" support="https://github.com/zeddius1983/unraid-tmuxai/issues" icon="tmuxai.png" pluginName="TmuxAI">
 
 <DESCRIPTION>
 TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal. Perfect for getting command help, code suggestions, and quick answers while working in Unraid.
 </DESCRIPTION>
 
 <CHANGES>
+###2026.02.14
+- Updated plugin header icon to use tmuxai.png
+
 ###2026.02.13d
 - Fixed save popup to be closable (changed showConfirmButton to true)
 - Updated plugin icon in Plugins tab to use FontAwesome icon (fa-terminal)
