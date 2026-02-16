@@ -13,11 +13,11 @@ $return = [];
 
 if(isset($_POST['config_content'])) {
     try {
-        $config_file = '/boot/config/plugins/tmuxai/config/config.yaml';
+        $config_file = '/mnt/user/appdata/tmuxai/config/config.yaml';
         
         // Security check - ensure we're only writing to our plugin directory
         // Use realpath to prevent path traversal attacks
-        $allowed_dir = '/boot/config/plugins/tmuxai/';
+        $allowed_dir = '/mnt/user/appdata/tmuxai/';
         $real_config_dir = dirname($config_file);
         
         // Ensure directory exists for realpath to work

@@ -8,8 +8,8 @@ Markdown="false"
 <?php
 require_once '/usr/local/emhttp/webGui/include/Helpers.php';
 
-$config_file = '/boot/config/plugins/tmuxai/config/config.yaml';
-$config_dir = '/boot/config/plugins/tmuxai/config';
+$config_file = '/mnt/user/appdata/tmuxai/config/config.yaml';
+$config_dir = '/mnt/user/appdata/tmuxai/config';
 
 // Ensure config directory exists
 if (!is_dir($config_dir)) {
