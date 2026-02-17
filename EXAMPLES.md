@@ -25,7 +25,7 @@ tmuxai --version || echo "tmuxai is ready to configure"
 # Edit configuration via WebGUI
 # Go to Settings > User Utilities > TmuxAI in Unraid WebGUI
 # Or edit directly:
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 
 # Add your configuration:
 # models:

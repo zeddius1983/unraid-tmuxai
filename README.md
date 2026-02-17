@@ -34,7 +34,7 @@ plugin install /boot/config/plugins/tmuxai.plg
 # Configure your API key
 # Option 1: Via User Utilities in Unraid WebGUI (Settings > User Utilities > TmuxAI)
 # Option 2: Edit config file directly
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 
 # Test it!
 tmuxai ask "What is Unraid?"
@@ -83,7 +83,7 @@ After installation, you need to configure your AI provider credentials:
 
 1. **Edit the config file:**
    ```bash
-   nano /boot/config/plugins/tmuxai/config/config.yaml
+   nano /mnt/user/appdata/tmuxai/config/config.yaml
    ```
 
 2. **Add your AI provider configuration:**
@@ -135,8 +135,8 @@ tmuxai ask "How do I add a new cache pool in Unraid?"
 ### Advanced Configuration
 
 tmuxai configuration is automatically persisted across Unraid reboots:
-- Config file location: `/boot/config/plugins/tmuxai/config/config.yaml`
-- Symlink created at: `/root/.config/tmuxai` → `/boot/config/plugins/tmuxai/config`
+- Config file location: `/mnt/user/appdata/tmuxai/config/config.yaml`
+- Symlink created at: `/root/.config/tmuxai` → `/mnt/user/appdata/tmuxai/config`
 
 Edit the config file to customize tmuxai behavior:
 
@@ -186,7 +186,7 @@ echo $OPENAI_API_KEY
 
 Check the configuration readme:
 ```bash
-cat /boot/config/plugins/tmuxai/config/README.txt
+cat /mnt/user/appdata/tmuxai/config/README.txt
 ```
 
 ## Uninstallation
@@ -201,7 +201,7 @@ cat /boot/config/plugins/tmuxai/config/README.txt
    removepkg tmuxai
    ```
 
-Note: Configuration files are preserved in `/boot/config/plugins/tmuxai` even after uninstallation.
+Note: Configuration files are preserved in `/mnt/user/appdata/tmuxai` even after uninstallation.
 
 ## Requirements
 

@@ -24,7 +24,7 @@ Configure your API key:
 
 **Option 2: Edit config file directly**
 ```bash
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 ```
 
 Add your model configuration:
@@ -56,12 +56,13 @@ Inside a tmux session:
 
 ## Configuration Files
 
-- Plugin config: `/boot/config/plugins/tmuxai/`
-- Config file: `/boot/config/plugins/tmuxai/config/config.yaml`
-- tmuxai config: `/root/.config/tmuxai/` (symlink to `/boot/config/plugins/tmuxai/config`)
+- Plugin metadata: `/boot/config/plugins/tmuxai/` (plugin files only)
+- Config directory: `/mnt/user/appdata/tmuxai/config/` (persisted on array)
+- Config file: `/mnt/user/appdata/tmuxai/config/config.yaml`
+- tmuxai config: `/root/.config/tmuxai/` (symlink to `/mnt/user/appdata/tmuxai/config`)
 - Binary location: `/usr/local/bin/tmuxai`
 
-**Note:** The plugin creates a symlink from `/root/.config/tmuxai` to `/boot/config/plugins/tmuxai/config` to ensure your tmuxai configuration persists across Unraid reboots.
+**Note:** The plugin creates a symlink from `/root/.config/tmuxai` to `/mnt/user/appdata/tmuxai/config` to ensure your tmuxai configuration persists across Unraid reboots and uses faster array storage instead of USB flash.
 
 ## Environment Variables
 
@@ -105,10 +106,10 @@ tmuxai ask "Why is my array not mounting?"
 which tmuxai
 
 # Check configuration file
-cat /boot/config/plugins/tmuxai/config/config.yaml
+cat /mnt/user/appdata/tmuxai/config/config.yaml
 
-# View plugin files
-ls -la /boot/config/plugins/tmuxai/
+# View config directory
+ls -la /mnt/user/appdata/tmuxai/config/
 
 # Check if running in tmux
 echo $TMUX
@@ -121,5 +122,5 @@ echo $TMUX
 removepkg tmuxai
 
 # Configuration files remain in:
-# /boot/config/plugins/tmuxai/
+# /mnt/user/appdata/tmuxai/
 ```

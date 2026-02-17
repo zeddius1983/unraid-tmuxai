@@ -22,7 +22,7 @@ TmuxAI brings powerful AI assistance directly into your tmux terminal sessions o
 - Other OpenAI-compatible APIs
 
 **Configuration:**
-Your configuration is stored in `/boot/config/plugins/tmuxai/config/config.yaml` and persists across reboots.
+Your configuration is stored in `/mnt/user/appdata/tmuxai/config/config.yaml` and persists across reboots.
 
 **Usage:**
 - Inside tmux: Press `Ctrl+b` then `C` (capital C) to ask AI

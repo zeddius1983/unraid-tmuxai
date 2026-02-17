@@ -71,7 +71,7 @@ plugin install /boot/config/plugins/tmuxai.plg
 Installing tmuxai plugin...
 Downloading tmuxai...
 tmuxai installed successfully!
-See /boot/config/plugins/tmuxai/config/README.txt for configuration instructions.
+See /mnt/user/appdata/tmuxai/config/README.txt for configuration instructions.
 TmuxAI plugin installation complete!
 ```
 
@@ -169,7 +169,7 @@ You can configure tmuxai in two ways:
 
 ```bash
 # Edit the config file
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 ```
 
 Add your AI provider configuration:
@@ -190,7 +190,7 @@ models:
 
 Save the file (Ctrl+O, Enter) and exit (Ctrl+X).
 
-**Note:** Configuration is automatically persisted across reboots as it's stored in `/boot/config/plugins/tmuxai/config/`.
+**Note:** Configuration is automatically persisted across reboots as it's stored in `/mnt/user/appdata/tmuxai/config/`.
 
 ## Verification Steps
 
@@ -238,17 +238,17 @@ tmuxai ask "Test Anthropic"
 ```bash
 # Check that config files were created
 ls -la /boot/config/plugins/tmuxai/
-ls -la /boot/config/plugins/tmuxai/config/
+ls -la /mnt/user/appdata/tmuxai/config/
 
 # Verify the symlink was created
 ls -la /root/.config/tmuxai
-# Should show: tmuxai -> /boot/config/plugins/tmuxai/config
+# Should show: tmuxai -> /mnt/user/appdata/tmuxai/config
 
 # Check persisted config directory
-ls -la /boot/config/plugins/tmuxai/config/
+ls -la /mnt/user/appdata/tmuxai/config/
 
 # View the README
-cat /boot/config/plugins/tmuxai/config/README.txt
+cat /mnt/user/appdata/tmuxai/config/README.txt
 ```
 
 ### 5. Test After Reboot
@@ -262,7 +262,7 @@ ssh root@YOUR_UNRAID_IP
 
 # Verify symlink still exists (it should be recreated on boot)
 ls -la /root/.config/tmuxai
-# Should show: tmuxai -> /boot/config/plugins/tmuxai/config
+# Should show: tmuxai -> /mnt/user/appdata/tmuxai/config
 
 # Test that your config persisted
 tmuxai ask "Test after reboot"
@@ -270,7 +270,7 @@ tmuxai ask "Test after reboot"
 # If you created any config files, verify they still exist
 ls -la /root/.config/tmuxai/
 # or
-ls -la /boot/config/plugins/tmuxai/config/
+ls -la /mnt/user/appdata/tmuxai/config/
 ```
 
 ## Troubleshooting
@@ -358,7 +358,7 @@ installplg /boot/config/plugins/tmuxai.plg  # Unraid 6.x
 plugin install /boot/config/plugins/tmuxai.plg  # Unraid 7
 
 # Reconfigure via Settings > User Utilities > TmuxAI or edit config:
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 ```
 
 ### Issue 5: Different Architecture
@@ -470,7 +470,7 @@ removepkg tmuxai
 which tmuxai  # Should return nothing
 
 # Check that config is preserved
-ls /boot/config/plugins/tmuxai/config/
+ls /mnt/user/appdata/tmuxai/config/
 ```
 
 ### Complete Cleanup (Remove Everything)
@@ -481,6 +481,7 @@ removepkg tmuxai
 
 # Remove all configuration
 rm -rf /boot/config/plugins/tmuxai
+rm -rf /mnt/user/appdata/tmuxai
 
 # Remove from go file if you added it
 nano /boot/config/go
@@ -488,7 +489,8 @@ nano /boot/config/go
 
 # Verify complete removal
 which tmuxai  # Should return nothing
-ls /boot/config/plugins/tmuxai  # Should not exist
+ls /boot/config/plugins/tmuxai  # Should not exist (or only .plg file)
+ls /mnt/user/appdata/tmuxai  # Should not exist
 ```
 
 ## Reporting Issues
@@ -506,6 +508,7 @@ If you encounter issues during testing:
    # Plugin status
    ls -la /usr/local/bin/tmuxai
    ls -la /boot/config/plugins/tmuxai/
+   ls -la /mnt/user/appdata/tmuxai/config/
    
    # Recent logs
    tail -100 /var/log/syslog | grep -i tmuxai
@@ -574,7 +577,7 @@ installplg /boot/config/plugins/tmuxai.plg
 plugin install /boot/config/plugins/tmuxai.plg
 
 # Configure via Settings > User Utilities > TmuxAI or edit directly:
-nano /boot/config/plugins/tmuxai/config/config.yaml
+nano /mnt/user/appdata/tmuxai/config/config.yaml
 
 # Test
 tmuxai ask "Test question"
