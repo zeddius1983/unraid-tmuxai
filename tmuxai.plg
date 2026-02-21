@@ -22,20 +22,22 @@
 
 <FILE Run="/bin/bash">
 <INLINE>
-# Ensure config directory exists
+# Ensure config directory exists on flash (persistent across reboots)
 mkdir -p /boot/config/plugins/&name;/config
-mkdir -p /var/log/&name;
 
-# Setup root config directory avoiding flash wear for logs
+# Setup root config directory
 mkdir -p /root/.config/&name;
 
-# Symlink specifically the config.yaml that our UI generates
+# Symlink config.yaml from flash so it persists across reboots
 ln -sf /boot/config/plugins/&name;/config/config.yaml /root/.config/&name;/config.yaml
 
-# Redirect logs to /var/log (Unraid RAM disk) instead of flash
-touch /var/log/&name;/tmuxai.log
-ln -sf /var/log/&name;/tmuxai.log /root/.config/&name;/tmuxai.log
-ln -sf /var/log/&name; /root/.config/&name;/logs
+# Symlink history file from flash so it persists across reboots
+touch /boot/config/plugins/&name;/history
+ln -sf /boot/config/plugins/&name;/history /root/.config/&name;/history
+
+# Redirect log to /var/log (Unraid RAM disk) instead of flash
+touch /var/log/&name;.log
+ln -sf /var/log/&name;.log /root/.config/&name;/tmuxai.log
 
 echo ""
 echo "----------------------------------------------------"
@@ -51,7 +53,7 @@ echo ""
 removepkg &name;-&version;
 rm -rf &plugdir;
 rm -rf /root/.config/&name;
-rm -rf /var/log/&name;
+rm -f /var/log/&name;.log
 # Keep /boot/config/plugins/tmuxai so settings aren't lost
 echo ""
 echo "----------------------------------------------------"
