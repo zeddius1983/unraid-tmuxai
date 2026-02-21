@@ -1,0 +1,75 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ""
+      MD5: ""
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        run: |
+          # Remove leading "v" from tag (v2026.02.21 -> 2026.02.21)
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Using version: ${VERSION}"
+
+      - name: Build Plugin Archive
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+          mkdir -p archive
+          mv tmuxai.txz "archive/tmuxai-${VERSION}.txz"
+
+          MD5=$(md5sum "archive/tmuxai-${VERSION}.txz" | awk '{print $1}')
+          echo "MD5=${MD5}" >> $GITHUB_ENV
+
+          # Update version inside PLG file
+          sed -i "s/<!ENTITY version   \".*\">/<!ENTITY version   \"${VERSION}\">/" tmuxai.plg
+
+      - name: Commit artifact to main (archive/)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Switch from detached tag checkout to main
+          git fetch origin main
+          git checkout main
+          git pull --ff-only origin main
+
+          # Bring the built outputs into main working tree
+          # archive/ and *.txz are ignored in your .gitignore, so force-add is required.
+          git add -f "archive/tmuxai-${VERSION}.txz" tmuxai.plg
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: publish archive tmuxai-${VERSION}.txz"
+          git push origin main
+
+      - name: Create GitHub Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "TmuxAI ${{ env.VERSION }}"
+          files: |
+            archive/tmuxai-${{ env.VERSION }}.txz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

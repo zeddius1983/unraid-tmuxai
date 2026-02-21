@@ -1,0 +1,71 @@
+Menu="Utilities"
+Type="xmenu"
+Title="TmuxAI"
+Icon="tmuxai.png"
+Tag="terminal"
+---
+<?php
+$plugin = "tmuxai";
+$cfg_file = "/boot/config/plugins/$plugin/settings.cfg";
+$yaml_dir = "/boot/config/plugins/$plugin/config";
+$yaml_file = "$yaml_dir/config.yaml";
+
+// Default settings
+$PROVIDER = "openrouter";
+$MODEL = "z-ai/glm-4.7";
+$API_KEY = "";
+
+if (file_exists($cfg_file)) {
+    $cfg = parse_ini_file($cfg_file);
+    if (isset($cfg['PROVIDER'])) $PROVIDER = $cfg['PROVIDER'];
+    if (isset($cfg['MODEL']))    $MODEL    = $cfg['MODEL'];
+    if (isset($cfg['API_KEY']))  $API_KEY  = $cfg['API_KEY'];
+    
+    // Ensure the config directory exists
+    if (!is_dir($yaml_dir)) {
+        mkdir($yaml_dir, 0755, true);
+    }
+
+    // Generate YAML from current settings for tmuxai CLI
+    // Note: We create a minimal valid yaml for the typical single-model setup
+    $yaml_content = "models:\n";
+    $yaml_content .= "  default:\n";
+    $yaml_content .= "    provider: \"$PROVIDER\"\n";
+    $yaml_content .= "    model: \"$MODEL\"\n";
+    $yaml_content .= "    api_key: \"$API_KEY\"\n";
+    
+    file_put_contents($yaml_file, $yaml_content);
+}
+?>
+
+<div class="title" style="margin-top: 20px;">
+    <h2>TmuxAI Settings</h2>
+</div>
+
+<form markdown="1" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="tmuxai/settings.cfg">
+
+<b>AI Provider:</b>
+: <input type="text" name="PROVIDER" value="<?=$PROVIDER?>" size="60">
+> *Example:* `openrouter`, `openai`, `anthropic`, `google`
+
+<b>AI Model:</b>
+: <input type="text" name="MODEL" value="<?=$MODEL?>" size="60">
+> *Example:* `z-ai/glm-4.7`, `gpt-4o`, `claude-3-5-sonnet-20241022`
+
+<b>API Key:</b>
+: <input type="password" name="API_KEY" value="<?=$API_KEY?>" size="60" placeholder="Optional for some local providers">
+> *Your API Key for the selected provider.*
+
+&nbsp;
+: <input type="submit" name="#apply" value="Apply" class="bb">
+</form>
+
+<div class="title" style="margin-top: 40px;">
+    <h2>Usage Instructions</h2>
+</div>
+<div markdown="1">
+*   **Direct AI Integration:** TmuxAI brings powerful AI assistance directly into your tmux terminal sessions.
+*   **Usage:** Run `tmuxai ask "your question"` in the terminal to get command-line advice.
+*   **Configuration:** The settings saved here generate the `config.yaml` automatically for the CLI tool.
+</div>

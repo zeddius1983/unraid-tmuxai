@@ -1,360 +1,64 @@
 <?xml version='1.0' standalone='yes'?>
-
-<!--
-  TmuxAI Plugin for Unraid
-  Author: zeddius1983
-  Repository: https://github.com/zeddius1983/unraid-tmuxai
--->
-
-<PLUGIN name="tmuxai" author="zeddius1983" version="2026.02.14" launch="Settings/TmuxAI" pluginURL="https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.plg" min="6.9.0" support="https://github.com/zeddius1983/unraid-tmuxai/issues" icon="tmuxai.png" pluginName="TmuxAI">
-
-<DESCRIPTION>
-TmuxAI brings powerful AI assistance directly into your tmux terminal sessions. Integrate with ChatGPT, Claude, Gemini, and other AI models without leaving your terminal. Perfect for getting command help, code suggestions, and quick answers while working in Unraid.
-</DESCRIPTION>
+<!DOCTYPE PLUGIN [
+<!ENTITY name      "tmuxai">
+<!ENTITY author    "zeddius1983">
+<!ENTITY version   "2026.02.21">
+<!ENTITY launch    "Settings/TmuxAI">
+<!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
+<!ENTITY github    "zeddius1983/unraid-tmuxai">
+<!ENTITY pluginURL "https://raw.githubusercontent.com/&github;/main/tmuxai.plg">
+]>
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.9.0" icon="tmuxai.png">
 
 <CHANGES>
-###2026.02.14
-- Updated plugin header icon to use tmuxai.png
-
-###2026.02.13d
-- Fixed save popup to be closable (changed showConfirmButton to true)
-- Updated plugin icon in Plugins tab to use FontAwesome icon (fa-terminal)
-
-###2026.02.13c
-- Fixed save functionality - implemented AJAX-based save with proper feedback
-- Fixed icon not appearing in User Utilities section (changed Menu to "Utilities" with Type="xmenu")
-- Added proper JavaScript save handler with SweetAlert notifications
-- Configuration saves now work correctly without page refresh
-
-###2026.02.13b
-- Removed setup.sh script - simplified configuration
-- Added Settings tab to view/edit config.yaml directly in the UI
-- Fixed plugin icon display in Unraid plugins tab
-- Added plugin description (README.md)
-- Config file now at /boot/config/plugins/tmuxai/config/config.yaml
-
-###2026.02.13
-- Simplified config location to /boot/config/plugins/tmuxai/config (removed nested .config/tmuxai)
-- Create symlink from /root/.config/tmuxai to /boot/config/plugins/tmuxai/config
-- Ensure tmuxai configuration persists across Unraid reboots
-- Automatically migrate existing config files to persisted storage
-
-###2026.02.12
-- Updated plugin header to remove !ENTITY declarations (use inline values)
-- Created new custom TmuxAI icon with terminal splits and AI elements
-- Updated tmuxai repository to github.com/alvinunreal/tmuxai
-- Updated tmuxai version to v2.1.0
-- Fixed installation to use correct releases page
-- Fixed download URL to use tar.gz format (tmuxai_Linux_amd64.tar.gz)
-- Added tar.gz extraction logic for proper installation
-
-###2024.12.29
-- Initial release
-- Install tmuxai CLI tool
-- Support for Unraid 6.9.0+
+###2026.02.21
+- Migrated to new native Slackware architecture, fetching binary pre-built and configuring seamlessly.
 </CHANGES>
 
-<!--
-This plugin installs tmuxai, a CLI tool that integrates AI into tmux.
-tmuxai allows you to use AI capabilities directly from your tmux sessions.
--->
-
-<FILE Name="/boot/config/plugins/tmuxai/tmuxai.png">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
+<!-- The .txz package downloaded from GitHub -->
+<FILE Name="/boot/config/plugins/&name;/&name;-&version;.txz" Run="upgradepkg --install-new">
+<URL>https://raw.githubusercontent.com/&github;/main/archive/&name;-&version;.txz</URL>
 </FILE>
 
-<FILE Name="/usr/local/emhttp/plugins/tmuxai/README.md">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/source/usr/local/emhttp/plugins/tmuxai/README.md</URL>
-</FILE>
-
-<FILE Name="/usr/local/emhttp/plugins/tmuxai/TmuxAI.page">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/source/usr/local/emhttp/plugins/tmuxai/TmuxAI.page</URL>
-</FILE>
-
-<FILE Name="/usr/local/emhttp/plugins/tmuxai/tmuxai.png">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/tmuxai.png</URL>
-</FILE>
-
-<FILE Name="/usr/local/emhttp/plugins/tmuxai/include/tmuxai_save.php">
-<URL>https://raw.githubusercontent.com/zeddius1983/unraid-tmuxai/main/source/usr/local/emhttp/plugins/tmuxai/include/tmuxai_save.php</URL>
-</FILE>
-
-<FILE Name="/boot/config/plugins/tmuxai/config/config.yaml">
-<INLINE>
-<![CDATA[
-# TmuxAI Example Configuration
-# This is a sample configuration file for tmuxai
-# 
-# SECURITY WARNING: This file may contain sensitive API keys!
-# - Do NOT commit this file to version control with real API keys
-# - Keep your API keys secure and private
-# - Consider using environment variables for production use
-#
-# IMPORTANT: You MUST customize this configuration before use!
-# Replace "YOUR_API_KEY_HERE" with your actual API keys
-
-# Example configuration with OpenRouter models:
-# Uncomment and customize the models you want to use
-
-# models:
-#   glm-4.7:
-#     provider: "openrouter"
-#     model: "z-ai/glm-4.7"
-#     api_key: "YOUR_API_KEY_HERE"
-#   kimi-k2.5:
-#     provider: "openrouter"
-#     model: "moonshotai/kimi-k2.5"
-#     api_key: "YOUR_API_KEY_HERE"
-
-# To use this configuration:
-# 1. Uncomment the models section above
-# 2. Replace YOUR_API_KEY_HERE with your actual OpenRouter API key
-# 3. You can add more models as needed
-# 4. For more information, visit https://tmuxai.dev
-]]>
-</INLINE>
-</FILE>
-
-<!--
-Install script
--->
 <FILE Run="/bin/bash">
 <INLINE>
-<![CDATA[
-#!/bin/bash
+# Ensure config directory exists
+mkdir -p /boot/config/plugins/&name;/config
+mkdir -p /var/log/&name;
 
-PLUGIN_NAME="tmuxai"
-PLUGIN_DIR="/boot/config/plugins/${PLUGIN_NAME}"
-INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="/boot/config/plugins/${PLUGIN_NAME}/config"
+# Setup root config directory avoiding flash wear for logs
+mkdir -p /root/.config/&name;
 
-# Create directories
-mkdir -p "${PLUGIN_DIR}"
-mkdir -p "${CONFIG_DIR}"
+# Symlink specifically the config.yaml that our UI generates
+ln -sf /boot/config/plugins/&name;/config/config.yaml /root/.config/&name;/config.yaml
 
-# Detect architecture
-ARCH=$(uname -m)
-case ${ARCH} in
-  x86_64)
-    TMUXAI_ARCH="Linux_amd64"
-    ;;
-  aarch64)
-    TMUXAI_ARCH="Linux_arm64"
-    ;;
-  *)
-    echo "Unsupported architecture: ${ARCH}"
-    exit 1
-    ;;
-esac
+# Redirect logs to /var/log (Unraid RAM disk) instead of flash
+touch /var/log/&name;/tmuxai.log
+ln -sf /var/log/&name;/tmuxai.log /root/.config/&name;/tmuxai.log
+ln -sf /var/log/&name; /root/.config/&name;/logs
 
-# Download tmuxai archive
-echo "Downloading tmuxai for ${TMUXAI_ARCH}..."
-TMUXAI_VERSION="v2.1.0"
-DOWNLOAD_URL="https://github.com/alvinunreal/tmuxai/releases/download/${TMUXAI_VERSION}/tmuxai_${TMUXAI_ARCH}.tar.gz"
-
-# Try to download tmuxai archive
-TEMP_DIR="${PLUGIN_DIR}/tmuxai_download"
-TEMP_FILE="${TEMP_DIR}/tmuxai.tar.gz"
-DOWNLOAD_SUCCESS=false
-ERROR_LOG="${PLUGIN_DIR}/download_error.log"
-
-# Create temporary directory
-mkdir -p "${TEMP_DIR}"
-
-if curl -L -f -o "${TEMP_FILE}" "${DOWNLOAD_URL}" 2>"${ERROR_LOG}"; then
-  # Check if downloaded file is not empty and is a valid gzip archive
-  if [ -s "${TEMP_FILE}" ]; then
-    # Verify it's a gzip archive
-    FILE_TYPE=$(file "${TEMP_FILE}" 2>/dev/null)
-    if echo "${FILE_TYPE}" | grep -q "gzip compressed data"; then
-      # Extract the archive
-      echo "Extracting tmuxai archive..."
-      if tar --no-same-owner -xzf "${TEMP_FILE}" -C "${TEMP_DIR}" 2>"${ERROR_LOG}"; then
-        # Find the tmuxai binary in the extracted files
-        TMUXAI_BINARY=$(find "${TEMP_DIR}" -name "tmuxai" -type f 2>/dev/null | head -n 1)
-        if [ -n "${TMUXAI_BINARY}" ] && [ -f "${TMUXAI_BINARY}" ]; then
-          # Verify it's an executable
-          if file "${TMUXAI_BINARY}" 2>/dev/null | grep -q "ELF.*executable"; then
-            mv "${TMUXAI_BINARY}" "${INSTALL_DIR}/tmuxai"
-            chmod +x "${INSTALL_DIR}/tmuxai"
-            DOWNLOAD_SUCCESS=true
-            echo "Binary extraction and installation successful"
-            rm -f "${ERROR_LOG}"
-          else
-            echo "Extracted file is not a valid ELF executable binary"
-          fi
-        else
-          echo "Could not find tmuxai binary in extracted archive"
-        fi
-      else
-        echo "Failed to extract archive"
-        if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
-          echo "Extraction error: $(cat "${ERROR_LOG}")"
-        fi
-      fi
-    else
-      echo "Downloaded file is not a valid gzip archive"
-      echo "File type: ${FILE_TYPE}"
-    fi
-  else
-    echo "Downloaded file was empty"
-  fi
-else
-  echo "Failed to download tmuxai archive from GitHub releases"
-  if [ -f "${ERROR_LOG}" ] && [ -s "${ERROR_LOG}" ]; then
-    echo "Error details: $(cat "${ERROR_LOG}")"
-  fi
-fi
-
-# Clean up temporary directory
-rm -rf "${TEMP_DIR}"
-
-# If binary download failed, try pip installation
-if [ "$DOWNLOAD_SUCCESS" = false ]; then
-  echo "Trying alternative installation method using pip..."
-  
-  if command -v pip3 &> /dev/null; then
-    echo "Installing tmuxai using pip3..."
-    if pip3 install tmuxai; then
-      echo "Successfully installed tmuxai using pip3"
-    else
-      echo "ERROR: pip3 installation failed"
-      exit 1
-    fi
-  elif command -v pip &> /dev/null; then
-    echo "Installing tmuxai using pip..."
-    if pip install tmuxai; then
-      echo "Successfully installed tmuxai using pip"
-    else
-      echo "ERROR: pip installation failed"
-      exit 1
-    fi
-  else
-    echo "ERROR: Could not install tmuxai. Neither direct download nor pip available."
-    exit 1
-  fi
-fi
-
-# Verify installation
-if command -v tmuxai &> /dev/null; then
-  echo "tmuxai installed successfully!"
-  tmuxai --version 2>/dev/null || echo "tmuxai is installed and ready to use"
-else
-  echo "WARNING: tmuxai installation completed but binary not found in PATH"
-fi
-
-# Create symlink for tmuxai config to persist across reboots
-# tmuxai uses /root/.config/tmuxai by default, but this is not persisted in Unraid
-# We create a symlink to /boot/config/plugins/tmuxai/config
-TMUXAI_CONFIG_DIR="/root/.config/tmuxai"
-PERSISTED_CONFIG_DIR="${CONFIG_DIR}"
-
-# Create the persisted config directory
-mkdir -p "${PERSISTED_CONFIG_DIR}"
-
-# Remove /root/.config/tmuxai if it exists and is not a symlink
-if [ -e "${TMUXAI_CONFIG_DIR}" ] && [ ! -L "${TMUXAI_CONFIG_DIR}" ]; then
-  # If it's a directory with files, move them to the persisted location
-  if [ -d "${TMUXAI_CONFIG_DIR}" ]; then
-    echo "Moving existing tmuxai config to persisted storage..."
-    cp -r "${TMUXAI_CONFIG_DIR}"/* "${PERSISTED_CONFIG_DIR}/" 2>/dev/null || true
-  fi
-  rm -rf "${TMUXAI_CONFIG_DIR}"
-fi
-
-# Create parent directory if it doesn't exist
-mkdir -p /root/.config
-
-# Create symlink if it doesn't exist
-if [ ! -L "${TMUXAI_CONFIG_DIR}" ]; then
-  ln -s "${PERSISTED_CONFIG_DIR}" "${TMUXAI_CONFIG_DIR}"
-  echo "Created symlink: ${TMUXAI_CONFIG_DIR} -> ${PERSISTED_CONFIG_DIR}"
-fi
-
-# Create a simple configuration file
-cat > "${CONFIG_DIR}/README.txt" << 'EOF'
-TmuxAI Configuration
-====================
-
-To use tmuxai, you need to set up your AI provider credentials.
-
-Supported providers:
-- OpenAI (ChatGPT)
-- Anthropic (Claude)
-- Google (Gemini)
-- Other OpenAI-compatible APIs
-
-Setup:
-1. Set your API key as an environment variable:
-   export OPENAI_API_KEY="your-api-key-here"
-   
-   Or for other providers:
-   export ANTHROPIC_API_KEY="your-api-key-here"
-
-2. Use tmuxai in your tmux sessions:
-   - Press prefix + C (capital C) to ask AI a question
-   - Or run: tmuxai ask "your question"
-
-Configuration Files:
-- tmuxai config is stored in: /boot/config/plugins/tmuxai/config
-- A symlink is created at: /root/.config/tmuxai -> /boot/config/plugins/tmuxai/config
-- This ensures your configuration persists across Unraid reboots
-
-For more information, visit: https://github.com/alvinunreal/tmuxai
-EOF
-
-echo "TmuxAI plugin installation complete!"
-echo "Config location (persisted): ${PERSISTED_CONFIG_DIR}"
-echo "Symlink created at: ${TMUXAI_CONFIG_DIR}"
-echo "See ${CONFIG_DIR}/README.txt for configuration instructions."
-
-]]>
+echo ""
+echo "----------------------------------------------------"
+echo " TmuxAI has been installed."
+echo " Please navigate to Settings -> TmuxAI in the Unraid WebUI to configure your API Key."
+echo "----------------------------------------------------"
+echo ""
 </INLINE>
 </FILE>
 
-<!--
-Remove script
--->
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
-<![CDATA[
-#!/bin/bash
-
-PLUGIN_NAME="tmuxai"
-INSTALL_DIR="/usr/local/bin"
-TMUXAI_CONFIG_SYMLINK="/root/.config/tmuxai"
-
-# Remove tmuxai binary
-if [ -f "${INSTALL_DIR}/tmuxai" ]; then
-  rm -f "${INSTALL_DIR}/tmuxai"
-  echo "Removed tmuxai binary"
-fi
-
-# Try to uninstall if it was installed via pip
-if command -v pip3 &> /dev/null; then
-  pip3 uninstall -y tmuxai 2>/dev/null || true
-fi
-
-if command -v pip &> /dev/null; then
-  pip uninstall -y tmuxai 2>/dev/null || true
-fi
-
-# Remove symlink if it exists
-if [ -L "${TMUXAI_CONFIG_SYMLINK}" ]; then
-  rm -f "${TMUXAI_CONFIG_SYMLINK}"
-  echo "Removed config symlink: ${TMUXAI_CONFIG_SYMLINK}"
-fi
-
-# Remove emhttp plugin directory
-rm -rf /usr/local/emhttp/plugins/tmuxai
-echo "Removed plugin interface files"
-
-# Note: We keep the config directory in /boot/config/plugins/tmuxai
-# so user settings persist across plugin reinstalls
-echo "TmuxAI plugin removed successfully!"
-echo "Configuration preserved in /boot/config/plugins/${PLUGIN_NAME}"
-
-]]>
+removepkg &name;-&version;
+rm -rf &plugdir;
+rm -rf /root/.config/&name;
+rm -rf /var/log/&name;
+# Keep /boot/config/plugins/tmuxai so settings aren't lost
+echo ""
+echo "----------------------------------------------------"
+echo " TmuxAI has been removed."
+echo " (Your settings were kept in /boot/config/plugins/&name;)"
+echo "----------------------------------------------------"
+echo ""
 </INLINE>
 </FILE>
 
